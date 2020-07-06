@@ -1,0 +1,47 @@
+<div class="modal fade" id="addMembersModal" role="dialog">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Thêm thành viên vào nhóm.</h4>
+          </div>
+          <div class="modal-body">
+              <div class="col-md-5 col-sm-12 find-user-add-to-group">
+                  <div class="row form-search-to-add">
+                      <div class="form-group">
+                          <input type="text" class="form-control" id="input-search-more-member-to-add-group-chat" placeholder="Nhập E-mail hoặc username của bạn bè..." />
+                          <span class="input-group-btn">
+                              <button id="btn-search-more-member-to-add-group-chat" class="btn btn-lg" type="button">
+                                  <i class="glyphicon glyphicon-search"></i>
+                              </button>
+                          </span>
+                      </div>
+                  </div>
+                  <div class="row result-searched">
+                      <ul id="group-chat-member">
+                          <!-- data from server -->
+                      </ul>
+                  </div>
+              </div>
+              <div class="col-md-5 col-sm-12 list-user-added">
+                  <ul id="friends-added"></ul>
+                  <div class="text-center" id="action-add-more-member">
+                      <!-- <input type="text" class="form-control" id="input-name-group-chat" placeholder="Nhập tên nhóm trò chuyện..." /> -->
+                      <div class="dropdown-list">
+                        <select id="select-group-id" name="select-group-chat-name">
+                            <% allConversationWithMessages.forEach(function(conversation, index) { %>
+                                <!-- <% if(conversation.members) { %> -->
+                                    <option value="<%= conversation._id %>"><%= conversation.name %></option>
+                                <!-- <% } %> -->
+                            <% }); %>
+                        </select>
+                      </div>
+                      <br>
+                      <button type="button" class="btn btn-primary" id="btn-add-more-member">Thêm</button>
+                      <button type="button" class="btn btn-danger" id="btn-cancel-add-more-member">Hủy</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
