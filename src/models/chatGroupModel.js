@@ -4,7 +4,15 @@ let Schema = mongoose.Schema;
 
 let ChatGroupSchema = new Schema({
   name: String,
+  userAmount: { type: Number, min: 1, max: 200 },
   messageAmount: { type: Number, default: 0 },
+  userId: String,
+  members: [
+    {
+      _id: false,
+      userId: String,
+    },
+  ],
   createdAt: { type: Number, default: Date.now },
   updatedAt: { type: Number, default: Date.now },
   deletedAt: { type: Number, default: null },

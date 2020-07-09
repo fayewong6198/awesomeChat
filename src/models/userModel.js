@@ -31,6 +31,13 @@ let UserSchema = new Schema({
   deletedAt: { type: Number, default: null },
 });
 
+UserSchema.virtual("chatGroups", {
+  ref: "chatGroupMember",
+  localField: "_id",
+  foreignField: "user",
+  justOne: false,
+});
+
 UserSchema.statics = {
   createNew(item) {
     return this.create(item);

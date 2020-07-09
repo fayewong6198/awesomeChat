@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import bluebird from "bluebird";
 
-const {resolve} = require('path');
-require('dotenv').config({path: resolve(__dirname,"../../sh/.env")});
+const { resolve } = require("path");
+require("dotenv").config({ path: resolve(__dirname, "../../sh/.env") });
 //const path = require('path');
 //require('dotenv').config({path:path.resolve(__dirname+'/./../../.env')});
 /**
@@ -15,9 +15,11 @@ let connectDB = () => {
 
   console.log(URI);
 
-  return mongoose.connect(URI, {useMongoClient: true});
+  return mongoose.connect(URI, {
+    useFindAndModify: true,
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
 };
 
 module.exports = connectDB;
-
-
