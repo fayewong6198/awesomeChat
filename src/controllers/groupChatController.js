@@ -1,5 +1,5 @@
-import {validationResult} from "express-validator/check";
-import {groupChat, contact} from "./../services/index";
+import { validationResult } from "express-validator/check";
+import { groupChat, contact } from "./../services/index";
 import { resolve } from "bluebird";
 
 let addNewGroup = async (req, res) => {
@@ -7,7 +7,7 @@ let addNewGroup = async (req, res) => {
   let validationErrors = validationResult(req);
   if (!validationErrors.isEmpty()) {
     let errors = Object.values(validationErrors.mapped());
-    errors.forEach(item => {
+    errors.forEach((item) => {
       errorsArr.push(item.msg);
     });
     return res.status(500).send(errorsArr);
@@ -18,8 +18,12 @@ let addNewGroup = async (req, res) => {
     let arrayMemberIds = req.body.arrayIds;
     let groupChatName = req.body.groupChatName;
 
-    let newGroupChat = await groupChat.addNewGroup(currentUserId, arrayMemberIds, groupChatName);
-    return res.status(200).send({groupChat: newGroupChat});
+    let newGroupChat = await groupChat.addNewGroup(
+      currentUserId,
+      arrayMemberIds,
+      groupChatName
+    );
+    return res.status(200).send({ groupChat: newGroupChat });
   } catch (error) {
     return res.status(500).send(error);
   }
@@ -30,7 +34,7 @@ let addNewMembers = async (req, res) => {
   let validationErrors = validationResult(req);
   if (!validationErrors.isEmpty()) {
     let errors = Object.values(validationErrors.mapped());
-    errors.forEach(item => {
+    errors.forEach((item) => {
       errorsArr.push(item.msg);
     });
     return res.status(500).send(errorsArr);
@@ -41,8 +45,14 @@ let addNewMembers = async (req, res) => {
     let arrayMemberIds = req.body.arrayIds;
     let groupChatId = req.body.groupChatId;
 
-    let addNewMembers = await groupChat.addNewMembers(arrayMemberIds, groupChatId);
-    return res.status(200).send({groupChat: addNewMembers});
+    console.log("before");
+
+    let addNewMembers = await groupChat.addNewMembers(
+      arrayMemberIds,
+      groupChatId
+    );
+    console.log("after");
+    return res.status(200).send({ groupChat: addNewMembers });
   } catch (error) {
     return res.status(500).send(error);
   }
@@ -53,7 +63,7 @@ let searchMembers = async (req, res) => {
   let validationErrors = validationResult(req);
   if (!validationErrors.isEmpty()) {
     let errors = Object.values(validationErrors.mapped());
-    errors.forEach(item => {
+    errors.forEach((item) => {
       errorsArr.push(item.msg);
     });
     return res.status(500).send(errorsArr);
@@ -63,7 +73,9 @@ let searchMembers = async (req, res) => {
     let currentUserId = req.user._id;
     let keyword = req.params.keyword;
     let users = await groupChat.searchMembers(currentUserId, keyword);
-    return res.render("main/newMembersGroup/sections/_searchMembers", {users});
+    return res.render("main/newMembersGroup/sections/_searchMembers", {
+      users,
+    });
   } catch (error) {
     return res.status(500).send(error);
   }
@@ -74,7 +86,7 @@ let removeMember = async (req, res) => {
     let contactId = req.body.uid;
     let groupChatId = req.body.groupChatId;
     let removeMember = await groupChat.removeMember(contactId, groupChatId);
-    return res.status(200).send({success: !!removeMember});
+    return res.status(200).send({ success: !!removeMember });
   } catch (error) {
     return res.status(500).send(error);
   }
@@ -85,8 +97,8 @@ let removeGroupChat = async (req, res) => {
     let userId = req.user._id;
     let groupChatId = req.body.groupChatId;
     let removeGroup = await groupChat.removeGroupChat(userId, groupChatId);
-    
-    return res.status(200).send({success: !!removeGroup});
+
+    return res.status(200).send({ success: !!removeGroup });
   } catch (error) {
     return res.status(500).send(error);
   }
@@ -97,5 +109,5 @@ module.exports = {
   addNewMembers: addNewMembers,
   searchMembers: searchMembers,
   removeMember: removeMember,
-  removeGroupChat: removeGroupChat
+  removeGroupChat: removeGroupChat,
 };

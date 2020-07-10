@@ -201,6 +201,17 @@ let initRoutes = (app) => {
     contact.searchFriendsToAddGoup
   );
 
+  // reset password
+  router
+    .route("/reset-password")
+    .get(auth.getResetPassword)
+    .post(auth.postResetPassword);
+
+  router
+    .route("/reset-password/:token")
+    .get(auth.confirmEmail)
+    .post(auth.createNewPassword);
+
   return app.use("/", router);
 };
 
