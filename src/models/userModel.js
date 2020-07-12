@@ -11,7 +11,7 @@ let UserSchema = new Schema({
   avatar: { type: String, default: "avatar-default.jpg" },
   role: { type: String, default: "user" },
   local: {
-    email: { type: String, trim: true },
+    email: { type: String, trim: true, unique: true },
     password: String,
     isActive: { type: Boolean, default: true },
     verifyToken: String,
@@ -30,6 +30,11 @@ let UserSchema = new Schema({
     type: String,
     default: null,
   },
+  permistions: [
+    {
+      type: String,
+    },
+  ],
   createdAt: { type: Number, default: Date.now },
   updatedAt: { type: Number, default: null },
   deletedAt: { type: Number, default: null },

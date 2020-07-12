@@ -6,45 +6,73 @@ const LIMIT_NUMBER = 10;
 let getNotifications = (currentUserId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let notifications = await NotificationModel.model.getByUserIdAndLimit(currentUserId, LIMIT_NUMBER);
+      let notifications = await NotificationModel.model.getByUserIdAndLimit(
+        currentUserId,
+        LIMIT_NUMBER
+      );
       let getNotifContents = notifications.map(async (notification) => {
-        let sender = await UserModel.getNormalUserDataById(notification.senderId);
-        return NotificationModel.contents.getContent(notification.type, notification.isRead, sender._id, sender.username, sender.avatar);
+        console.log("cc");
+        console.log(notification);
+        let sender = await UserModel.getNormalUserDataById(
+          notification.senderId
+        );
+
+        return NotificationModel.contents.getContent(
+          notification.type,
+          notification.isRead,
+          sender._id,
+          sender.username,
+          sender.avatar
+        );
       });
       resolve(await Promise.all(getNotifContents));
     } catch (error) {
-      reject(error)
+      reject(error);
     }
   });
 };
 
 /**
  * Đếm số thông báo chưa đọc
- * @param {String} currentUserId 
+ * @param {String} currentUserId
  */
 let countNotifUnread = (currentUserId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let notificationsUnread = await NotificationModel.model.countNotifUnread(currentUserId);
+      let notificationsUnread = await NotificationModel.model.countNotifUnread(
+        currentUserId
+      );
       resolve(notificationsUnread);
     } catch (error) {
-      reject(error)
+      reject(error);
     }
   });
 };
 
 /**
  * Đọc thêm 10 tin nhắn cũ
- * @param {String} currentUserId 
- * @param {number} skipNumberNotification 
+ * @param {String} currentUserId
+ * @param {number} skipNumberNotification
  */
 let readMore = (currentUserId, skipNumberNotification) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let newNotifications = await NotificationModel.model.readMore(currentUserId, skipNumberNotification, LIMIT_NUMBER);
+      let newNotifications = await NotificationModel.model.readMore(
+        currentUserId,
+        skipNumberNotification,
+        LIMIT_NUMBER
+      );
       let getNotifContents = newNotifications.map(async (notification) => {
-        let sender = await UserModel.getNormalUserDataById(notification.senderId);
-        return NotificationModel.contents.getContent(notification.type, notification.isRead, sender._id, sender.username, sender.avatar);
+        let sender = await UserModel.getNormalUserDataById(
+          notification.senderId
+        );
+        return NotificationModel.contents.getContent(
+          notification.type,
+          notification.isRead,
+          sender._id,
+          sender.username,
+          sender.avatar
+        );
       });
       resolve(await Promise.all(getNotifContents));
     } catch (error) {
@@ -55,8 +83,8 @@ let readMore = (currentUserId, skipNumberNotification) => {
 
 /**
  * Đánh dấu các thông báo là đã đọc
- * @param {string} currentUserId 
- * @param {array} targetUsers 
+ * @param {string} currentUserId
+ * @param {array} targetUsers
  */
 let markAllAsRead = (currentUserId, targetUsers) => {
   return new Promise(async (resolve, reject) => {
@@ -74,5 +102,5 @@ module.exports = {
   getNotifications: getNotifications,
   countNotifUnread: countNotifUnread,
   readMore: readMore,
-  markAllAsRead: markAllAsRead
+  markAllAsRead: markAllAsRead,
 };

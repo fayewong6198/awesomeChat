@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Awesome Chat</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    />
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- <link rel="stylesheet" href="/css/style.css" /> -->
+  </head>
+  <body>
+    <%- include("../sections/navbar"); %> <% if (msg) { %>
+    <div class="alert alert-danger" role="alert">
+      <%- msg %>
+    </div>
+    <% } %>
+
+    <div class="row">
+      <div class="col-md-3">
+        <%- include("../sections/left-side"); %>
+      </div>
+      <div class="col-md-9">
+        Create User
+
+        <div class="container">
+          <a href="/admin/users"
+            ><button class="btn btn-success float-right">Back</button></a
+          >
+          <br />
+          <form method="POST" action="/admin/users/create">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Email address</label>
+              <input
+                required
+                type="email"
+                class="form-control"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                placeholder="Enter email"
+                name="email"
+              />
+              <small id="emailHelp" class="form-text text-muted"
+                >We'll never share your email with anyone else.</small
+              >
+            </div>
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input
+                required
+                type="text"
+                class="form-control"
+                name="username"
+                placeholder="Username"
+              />
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input
+                required
+                type="password"
+                class="form-control"
+                name="password"
+                placeholder="Password"
+              />
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input
+                type="number"
+                class="form-control"
+                name="phone"
+                placeholder="Phone number"
+              />
+            </div>
+            <div class="form-group">
+              <label for="phone">Gender</label>
+              <select class="custom-select" name="gender">
+                <option value="male" selected>male</option>
+                <option value="female">female</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="phone">Role</label>
+              <select class="custom-select" name="role">
+                <option value="user" selected>user</option>
+                <option value="staff">staff</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!--Libraries-->
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+    <script src="/bower_components/jquery.nicescroll/jquery.nicescroll.min.js"></script>
+    <script src="/bower_components/AlertifyJS/build/alertify.js"></script>
+    <script src="/bower_components/moment/min/moment.min.js"></script>
+    <script src="/bower_components/moment/min/moment-with-locales.min.js"></script>
+    <script src="/bower_components/emojionearea/dist/emojionearea.min.js"></script>
+    <script src="/bower_components/peerjs/peer.min.js"></script>
+    <script src="/bower_components/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="/bower_components/photoset-grid/jquery.photoset-grid.min.js"></script>
+    <script src="/bower_components/jquery-colorbox/jquery.colorbox-min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/emojione/lib/js/emojione.min.js"></script>
+  </body>
+</html>

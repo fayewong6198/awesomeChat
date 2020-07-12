@@ -9,6 +9,9 @@ import sendEmail from "../../utils/sendEmail";
 let saltRounds = 7;
 
 let getLoginRegister = (req, res) => {
+  console.log(
+    "----------------------------Login-Register------------------------"
+  );
   return res.render("auth/master", {
     errors: req.flash("errors"),
     success: req.flash("success"),
@@ -80,6 +83,35 @@ let checkLoggedOut = (req, res, next) => {
     return res.redirect("/");
   }
   next();
+};
+
+// Role access
+const checkRoles = (...roles) => {
+  return (req, res, next) => {
+    console.log(req.user.role);
+    if (!roles.includes(req.user.role)) {
+      return res.redirect("/login-register");
+    }
+    next();
+  };
+};
+
+// Permistions access
+const checkPermistions = (...permistions) => {
+  return (req, res, next) => {
+    if (req.user.role == "admin") {
+      return next();
+    }
+
+    console.log(permistions);
+    for (let i = 0; i < permistions.length; i++) {
+      console.log(permistions[i]);
+      if (!req.user.permistions.includes(permistions[i]))
+        return res.redirect("/admin/users");
+    }
+
+    next();
+  };
 };
 
 // Reset Password
@@ -199,4 +231,6 @@ module.exports = {
   postResetPassword: postResetPassword,
   confirmEmail: confirmEmail,
   createNewPassword: createNewPassword,
+  checkRoles,
+  checkPermistions,
 };

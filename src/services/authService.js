@@ -2,7 +2,7 @@ import UserModel from "./../models/userModel";
 import bcrypt from "bcrypt";
 import uuidv4 from "uuid/v4";
 //import {reject, resolve} from "bluebird";
-import {transErrors, transSuccess, transMail} from "./../../lang/vi";
+import { transErrors, transSuccess, transMail } from "./../../lang/vi";
 import sendMail from "./../config/mailer";
 import { request } from "express";
 
@@ -27,14 +27,14 @@ let register = (email, gender, password, protocol, host) => {
       local: {
         email: email,
         password: bcrypt.hashSync(password, salt),
-        verifyToken: uuidv4()
+        verifyToken: uuidv4(),
       },
     };
-    let user = await  UserModel.createNew(userItem);
+    let user = await UserModel.createNew(userItem);
     let linkVerify = `${protocol}://${host}/verify/${user.local.verifyToken}`;
     //send mail
     sendMail(email, transMail.subject, transMail.template(linkVerify))
-      .then(success => {
+      .then((success) => {
         resolve(transSuccess.userCreated(user.local.email));
       })
       .catch(async (error) => {
@@ -48,7 +48,7 @@ let register = (email, gender, password, protocol, host) => {
 let verifyAccount = (token) => {
   return new Promise(async (resolve, reject) => {
     let userByToken = await UserModel.findByToken(token);
-    if(!userByToken) {
+    if (!userByToken) {
       return reject(transErrors.token_undefined);
     }
     await UserModel.verify(token);
@@ -58,5 +58,5 @@ let verifyAccount = (token) => {
 
 module.exports = {
   register: register,
-  verifyAccount: verifyAccount
-}; 
+  verifyAccount: verifyAccount,
+};

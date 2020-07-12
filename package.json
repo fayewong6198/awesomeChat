@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/doanhvo98/awesome_chat#readme",
   "dependencies": {
+    "backup": "^1.1.0",
     "bcrypt": "^4.0.1",
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.2",

@@ -7,6 +7,8 @@ import {
   notification,
   message,
   groupChat,
+  adminUser,
+  backup,
 } from "./../controllers/index";
 import {
   authValid,
@@ -212,6 +214,77 @@ let initRoutes = (app) => {
     .get(auth.confirmEmail)
     .post(auth.createNewPassword);
 
+  // ----------------Admin---------------------//
+  // User
+  // router.get("/admin/users", auth.checkLoggedIn, adminUser.listUser);
+  router
+    .route("/admin/users")
+    .get(
+      auth.checkLoggedIn,
+      auth.checkRoles("staff", "admin"),
+      adminUser.listUser
+    );
+  router
+    .route("/admin/users/create")
+    .get(
+      auth.checkLoggedIn,
+      auth.checkRoles("staff", "admin"),
+      auth.checkPermistions("CREATE_USER"),
+      adminUser.createUser
+    )
+    .post(
+      auth.checkLoggedIn,
+      auth.checkRoles("staff", "admin"),
+      auth.checkPermistions("CREATE_USER"),
+      authValid.register,
+      adminUser.postCreateUser
+    );
+  router
+    .route("/admin/users/:id")
+    .get(
+      auth.checkLoggedIn,
+      auth.checkRoles("staff", "admin"),
+      adminUser.retrieveUser
+    );
+  router
+    .route("/admin/users/update/:id")
+    .post(
+      auth.checkLoggedIn,
+      auth.checkRoles("staff", "admin"),
+      auth.checkPermistions("UPDATE_USER"),
+      adminUser.updateUser
+    );
+  router
+    .route("/admin/users/delete/:id")
+    .post(
+      auth.checkLoggedIn,
+      auth.checkRoles("staff", "admin"),
+      auth.checkPermistions("DELETE_USER"),
+      adminUser.deleteUser
+    );
+
+  router
+    .route("/admin/backup")
+    .get(
+      auth.checkLoggedIn,
+      auth.checkRoles("staff", "admin"),
+      backup.getBackUp
+    );
+
+  router
+    .route("/admin/backup")
+    .post(
+      auth.checkLoggedIn,
+      auth.checkRoles("staff", "admin"),
+      backup.postBackUp
+    );
+  router
+    .route("/admin/restore")
+    .post(
+      auth.checkLoggedIn,
+      auth.checkRoles("staff", "admin"),
+      backup.postRestore
+    );
   return app.use("/", router);
 };
 

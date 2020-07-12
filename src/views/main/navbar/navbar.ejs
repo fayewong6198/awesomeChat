@@ -119,6 +119,14 @@
                 &nbsp;Đăng xuất
               </a>
             </li>
+            <% if (user.role == 'admin' || user.role == 'staff') { %>
+            <li>
+              <a href="/admin/users">
+                <i class="fa fa-admin"></i>
+                &nbsp;Admin page
+              </a>
+            </li>
+            <% } %>
           </ul>
         </li>
       </ul>
