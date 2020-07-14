@@ -5,5 +5,6 @@ console.log(
 );
 backup({
   uri: `mongodb://localhost:27017/awesome_chat`, // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
-  root: `__dirname/cc`,
+  root: `${__dirname}/cc`,
 });
+console.log("done");

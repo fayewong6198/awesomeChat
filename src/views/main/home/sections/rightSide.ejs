@@ -87,6 +87,8 @@
             class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %>"
             data-mess-id="<%= message._id %>"
             id="<%= message._id %>"
+            oncontextmenu="show_menu('<%- message.senderId ==  user._id %>','<%- message._id %>' )"
+            onclick="show_menu1()"
           >
             <img
               src="/images/users/<%= message.sender.avatar %>"
@@ -95,12 +97,12 @@
             />
 
             <%= message.text %> <% if (message.senderId == user._id) { %>
-            <button
-              onclick="removeTextEmoji('<%= message._id %>','<%= message.receiverId %>',true)"
-              class="btn btn-danger"
-            >
-              Delete
-            </button>
+              
+          
+            <div class="dropdown-menu right-click-menu" id="context-menu<%- message._id %>">
+             
+              <p class="dropdown-item menu-delete" onclick="removeTextEmoji('<%= message._id %>','<%= message.receiverId %>',true)">Delete</p>
+            </div>
             <% } %>
           </div>
           <% } %> <% if (message.messageType === "text" && message.deletedAt !=
@@ -144,6 +146,8 @@
                 class="show-image-chat"
               />
               <% if (message.senderId == user._id) { %>
+                <i class="fas fa-clock"></i>
+
                 <button
                   onclick="removeImageChat('<%= message._id %>','<%= message.receiverId %>','true')"
                   class="btn btn-danger"
@@ -357,6 +361,8 @@
                 <img class="modal-content" id="img-chat-modal-content" />
               </div>
               <% if (message.senderId == user._id) { %>
+                <i class="fas fa-clock"></i>
+
                 <button
                   onclick="removeImageChat('<%= message._id %>','<%= message.receiverId %>',false)"
                   class="btn btn-danger"
@@ -375,6 +381,8 @@
               >
 
                 <% if (message.senderId == user._id) { %>
+                  <i class="fas fa-clock"></i>
+
                   <button
                     onclick="restoreImageChat('<%= message._id %>','<%= message.receiverId %>',false)"
                     class="btn btn-danger"
@@ -481,3 +489,22 @@
     <!-- Trường hợp tài khoản chưa có bạn bè thì hiện màn hình dưới. -->
   </div>
 </div>
+
+<script>
+  function show_menu( me, messageId) {
+  event.preventDefault();
+  $(`#context-menu${messageId}`).css({
+    display: "block",
+    background: "#fff",
+  })
+  console.log("cc")
+  $(`#context-menu${messageId}`).addClass("show");
+  return false; //blocks default Webbrowser right click menu  
+
+$("#context-menu p").on("click", function() {
+  $(this).parent().removeClass("show").hide();
+});
+}
+
+
+</script>
