@@ -31,27 +31,34 @@ function textAndEmojiChat(divId) {
           let isChatGroup =
             data.message.conversationType == "group" ? true : false;
           let myMessage = $(
-            `<div id="${data.message._id}" class="bubble me" data-mess-id="${data.message._id}"></div>`
+            `<div id="${data.message._id}" class="bubble me" id="${
+              data.message._id
+            }" data-mess-id="${data.message._id}" 
+            oncontextmenu="show_menu('${
+              data.message.sender.id == data.currentUserId
+            }','${data.message._id}' )"></div>`
           );
           myMessage.text(data.message.text);
           let convertEmojioneMessage = emojione.toImage(myMessage.html());
 
           if (dataTextEmojiForSend.isChatGroup) {
             let senderAvatar = `<img src="/images/users/${data.message.sender.avatar}" class="avatar-small" title="${data.message.sender.name}" />`;
-            myMessage.html(`${senderAvatar} ${convertEmojioneMessage} <button
-            onclick="removeTextEmoji('${data.message._id}','${data.message.receiverId}',${isChatGroup})"
-            class="btn btn-danger"
-          >
-            Delete
-          </button>`);
+            myMessage.html(`${senderAvatar} ${convertEmojioneMessage} 
+          
+          
+<div class="dropdown-menu right-click-menu context-menu" id="context-menu${data.message._id}">  
+<p class="dropdown-item menu" onclick="removeTextEmoji('${data.message._id}','${data.message.receiverId}',${isChatGroup})">Delete</p>
+</div>
+          `);
             increaseNumberMessageGroup(divId);
             dataToEmit.groupId = targetId;
           } else {
-            myMessage.html(`${convertEmojioneMessage} <button
-            onclick="removeTextEmoji('${data.message._id}','${data.message.receiverId}',${isChatGroup})"
-            class="btn btn-danger">
-            Delete
-          </button>`);
+            myMessage.html(`${convertEmojioneMessage} 
+          
+          <div class="dropdown-menu right-click-menu context-menu" id="context-menu<%- message._id %>">  
+	<p class="dropdown-item menu-delete" onclick="removeTextEmoji('${data.message._id}','${data.message.receiverId}',${isChatGroup})">Delete</p>
+</div>
+          `);
             dataToEmit.contactId = targetId;
           }
 
@@ -124,6 +131,7 @@ function removeTextEmoji(messageId, reciverId, isChatGroup) {
     dataType: "json",
     data: dataTextEmojiForSend,
     success: function (response) {
+      console.log("ccccc");
       console.log("message_Id ", response.message._id);
       console.log("reciverId ", response.message.receiverId);
       console.log("isGroup ", response.message.conversationType);
@@ -133,19 +141,22 @@ function removeTextEmoji(messageId, reciverId, isChatGroup) {
         messageId: response.message._id,
       });
 
-      let avatar = `<img src="/images/users/${response.message.sender.avatar}" class="avatar-small" title="${response.message.sender.name}" />`;
+      let avatar =
+        response.message.conversationType != "personal"
+          ? `<img src="/images/users/${response.message.sender.avatar}" class="avatar-small" title="${response.message.sender.name}" />`
+          : "";
       let text = "This message has been removed";
       console.log("dit me may");
       console.log(response.message._id);
       $(`#${response.message._id}`).html(`${avatar}${text}`);
 
       $(`#${response.message._id}`).append(
-        `<button
-        onclick="restoreTextEmoji('${response.message._id}','${response.message.receiverId}',${response.group})"
-        class="btn btn-danger"
-      >
-        Restore
-      </button>`
+        `
+      
+<div class="dropdown-menu right-click-menu context-menu" id="context-menu${response.message._id}">  
+<p class="dropdown-item "  onclick="restoreTextEmoji('${response.message._id}','${response.message.receiverId}',${response.group})">Restore</p>
+</div>
+      `
       );
     },
     error: function (response) {
@@ -181,12 +192,12 @@ function restoreTextEmoji(messageId, reciverId, isChatGroup) {
 
       $(`#${response.message._id}`).text(response.message.text);
       $(`#${response.message._id}`).append(
-        `<button
-          onclick="removeTextEmoji('${response.message._id}','${response.message.receiverId}','${isChatGroup}')"
-          class="btn btn-danger"
-        >
-          Delete
-        </button>`
+        `
+        
+<div class="dropdown-menu right-click-menu context-menu" id="context-menu${response.message._id}">  
+<p class="dropdown-item menu-delete" onclick="removeTextEmoji('${response.message._id}','${response.message.receiverId}','${isChatGroup}')">Delete</p>
+</div>
+        `
       );
       console.log("append success");
       console.log($(`#${response.message._id}`));
@@ -259,34 +270,37 @@ $(document).ready(function () {
     console.log("response-deleted Event");
     console.log(response);
 
-    let avatar = `<img src="/images/users/${response.message.sender.avatar}" class="avatar-small" title="${response.message.sender.name}" />`;
+    let avatar = response.group
+      ? `<img src="/images/users/${response.message.sender.avatar}" class="avatar-small" title="${response.message.sender.name}" />`
+      : "";
     let text = "This message has been removed";
     $(`#${response.messageId}`).html(`${avatar}${text}`);
     if (response.currentUserId === $("#dropdown-navbar-user").data("uid")) {
       $(`#${response.messageId}`).append(
-        `<button
-        onclick="restoreTextEmoji('${response.message._id}','${response.message.receiverId}',${response.group})"
-        class="btn btn-danger"
-      >
-        Restore
-      </button>`
+        `
+      <div class="dropdown-menu right-click-menu context-menu" id="context-menu${response.message._id}">  
+	<p class="dropdown-item " onclick="restoreTextEmoji('${response.message._id}','${response.message.receiverId}',${response.group})">Restore</p>
+</div>
+      `
       );
     }
   });
   socket.on("response-restored-chat-text-emoji", function (response) {
     console.log("response-restore Event");
     console.log(response);
-    let avatar = `<img src="/images/users/${response.message.sender.avatar}" class="avatar-small" title="${response.message.sender.name}" />`;
+    let avatar = response.group
+      ? `<img src="/images/users/${response.message.sender.avatar}" class="avatar-small" title="${response.message.sender.name}" />`
+      : "";
     let text = response.message.text;
     $(`#${response.messageId}`).html(`${avatar}${text}`);
     if (response.currentUserId === $("#dropdown-navbar-user").data("uid")) {
       $(`#${response.messageId}`).append(
-        `<button
-          onclick="removeTextEmoji('${response.message._id}','${response.message.receiverId}',${response.group})"
-          class="btn btn-danger"
-        >
-          Delete
-        </button>`
+        `
+        <div class="dropdown-menu right-click-menu context-menu" id="context-menu${response.message._id}">
+             
+              <p class="dropdown-item " onclick="removeTextEmoji('${response.message._id}','${response.message.receiverId}',${response.group})">Delete</p>
+            </div>
+        `
       );
     }
   });

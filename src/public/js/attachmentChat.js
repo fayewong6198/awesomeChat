@@ -6,7 +6,11 @@ function attachmentChat(divId) {
       let limit = 1048576; //byte = 1MB
 
       if (fileData.size > limit) {
-        alertify.notify("Kích thước tối đa cho phép là 1 MB.", "error", 7);
+        alertify.notify(
+          `Kích thước tối đa cho phép là 1 MB. ${fileData.size}`,
+          "error",
+          7
+        );
         $(this).val(null);
         return false;
       }
