@@ -60,7 +60,7 @@
         <div class="chat chat-in-group" data-chat="<%= conversation._id %>">
           <% conversation.messages.forEach(function(message) { %> <% if
           (message.messageType === "text" && message.deletedAt === null) { %>
-          <div class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %>"
+          <<<<<<< HEAD <div class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %>"
             data-mess-id="<%= message._id %>" id="<%= message._id %>">
             <img src="/images/users/<%= message.sender.avatar %>" class="avatar-small"
               title="<%= message.sender.name %>" />
@@ -70,56 +70,234 @@
               class="btn btn-danger">
               Delete
             </button>
-            <% } %>
-          </div>
-          <% } %> <% if (message.messageType === "text" && message.deletedAt !=
+            =======
+            <div class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %>"
+              data-mess-id="<%= message._id %>" id="<%= message._id %>"
+              oncontextmenu="show_menu('<%- message.senderId ==  user._id %>','<%- message._id %>' )"
+              onclick="show_menu1()">
+              <img src="/images/users/<%= message.sender.avatar %>" class="avatar-small"
+                title="<%= message.sender.name %>" />
+
+              <%= message.text %> <% if (message.senderId == user._id) { %>
+
+
+              <div class="dropdown-menu right-click-menu" id="context-menu<%- message._id %>">
+
+                <p class="dropdown-item menu-delete"
+                  onclick="removeTextEmoji('<%= message._id %>','<%= message.receiverId %>',true)">Delete</p>
+              </div>
+              >>>>>>> a4927bb685722ef3d63991b02c71ad17fc6236b8
+              <% } %>
+            </div>
+            <% } %> <% if (message.messageType === "text" && message.deletedAt !=
           null) { %>
-          <div class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %>"
-            data-mess-id="<%= message._id %>" id="<%= message._id %>">
-            <img src="/images/users/<%= message.sender.avatar %>" class="avatar-small"
-              title="<%= message.sender.name %>" />
+            <div class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %>"
+              data-mess-id="<%= message._id %>" id="<%= message._id %>">
+              <img src="/images/users/<%= message.sender.avatar %>" class="avatar-small"
+                title="<%= message.sender.name %>" />
 
-            This message has been removed <% if (message.senderId == user._id) {
+              This message has been removed <% if (message.senderId == user._id) {
             %>
-            <button onclick="restoreTextEmoji('<%= message._id %>','<%= message.receiverId %>',true)"
-              class="btn btn-danger">
-              Restore
-            </button>
+              <button onclick="restoreTextEmoji('<%= message._id %>','<%= message.receiverId %>',true)"
+                class="btn btn-danger">
+                Restore
+              </button>
+              <% } %>
+            </div>
+
+            <% } %> <% if (message.messageType === "image" && message.deletedAt === null ) { %>
+            <div
+              class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %> bubble-image-file"
+              data-mess-id="<%= message._id %>" id="<%= message._id %>">
+              <img src="/images/users/<%= message.sender.avatar %>" class="avatar-small"
+                title="<%= message.sender.name %>" />
+
+              <img src="data:<%= message.file.contentType %>;base64,<%= bufferToBase64(message.file.data) %>"
+                class="show-image-chat" />
+              <% if (message.senderId == user._id) { %>
+              <i class="fas fa-clock"></i>
+
+              <button onclick="removeImageChat('<%= message._id %>','<%= message.receiverId %>','true')"
+                class="btn btn-danger">
+                Delete
+              </button>
+              <% } %>
+
+            </div>
             <% } %>
-          </div>
 
-          <% } %> <% if (message.messageType === "image" && message.deletedAt === null ) { %>
-          <div class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %> bubble-image-file"
-            data-mess-id="<%= message._id %>" id="<%= message._id %>">
-            <img src="/images/users/<%= message.sender.avatar %>" class="avatar-small"
-              title="<%= message.sender.name %>" />
+        </div>
+        <% } %>
+        <div id="img-chat-modal" class="modal">
+          <!-- The Close Button -->
+          <span class="close">&times;</span>
 
-            <img src="data:<%= message.file.contentType %>;base64,<%= bufferToBase64(message.file.data) %>"
-              class="show-image-chat" />
-            <% if (message.senderId == user._id) { %>
-            <button onclick="removeImageChat('<%= message._id %>','<%= message.receiverId %>','true')"
-              class="btn btn-danger">
-              Delete
-            </button>
-            <% } %>
+          <!-- Modal Content (The Image) -->
+          <img class="modal-content" id="img-chat-modal-content" />
+        </div>
 
-          </div>
+
+        <% if (message.messageType === "image" && message.deletedAt !== null ) { %>
+        <div class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %> bubble-image-file"
+          data-mess-id="<%= message._id %>" id="<%= message._id %>">
+
+          <% if (message.senderId == user._id) { %>
+          <button onclick="restoreImageChat('<%= message._id %>','<%= message.receiverId %>',true)"
+            class="btn btn-danger">
+            Restore
+          </button>
           <% } %>
+
+        </div>
+        <% } %>
+        <% if (message.messageType === "file" && message.deletedAt === null) { %>
+        <div
+          class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %> bubble-attachment-file"
+          data-mess-id="<%= message._id %>" id="<%= message._id %>">
+          <img src="/images/users/<%= message.sender.avatar %>" class="avatar-small"
+            title="<%= message.sender.name %>" />
+          <a href="data:<%= message.file.contentType %>;base64,<%= bufferToBase64(message.file.data) %>"
+            download="<%= message.file.fileName %>">
+            <%= message.file.fileName %>
+          </a>
+          <% if (message.senderId == user._id) { %>
+          <button onclick="removeChatAttachment('<%= message._id %>','<%= message.receiverId %>',true)"
+            class="btn btn-danger">
+            Remove
+          </button>
+          <% } %>
+        </div>
+        <% } %>
+
+        <% if (message.messageType === "file" && message.deletedAt !== null) { %>
+        <div
+          class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %> bubble-attachment-file"
+          data-mess-id="<%= message._id %>" id="<%= message._id %>">
+          <img src="/images/users/<%= message.sender.avatar %>" class="avatar-small"
+            title="<%= message.sender.name %>" />
+          This message has been removed
+          </a>
+          <% if (message.senderId == user._id) { %>
+          <button onclick="restoreChatAttachment('<%= message._id %>','<%= message.receiverId %>',true)"
+            class="btn btn-danger">
+            Restore
+          </button>
+          <% } %>
+        </div>
+
+        <% } %>
+        <% }); %>
+      </div>
+    </div>
+    <div class="write" data-chat="<%= conversation._id %>">
+      <input type="text" id="write-chat-<%= conversation._id %>" class="write-chat chat-in-group"
+        data-chat="<%= conversation._id %>" />
+      <div class="icons">
+        <a href="#" class="icon-chat" data-chat="<%= conversation._id %>"><i class="fa fa-smile-o"></i></a>
+        <label for="image-chat-<%= conversation._id %>">
+          <input type="file" id="image-chat-<%= conversation._id %>" name="my-image-chat"
+            class="image-chat chat-in-group" data-chat="<%= conversation._id %>" />
+          <i class="fa fa-photo"></i>
+        </label>
+        <label for="attachment-chat-<%= conversation._id %>">
+          <input type="file" id="attachment-chat-<%= conversation._id %>" name="my-attachment-chat"
+            class="attachment-chat chat-in-group" data-chat="<%= conversation._id %>" />
+          <i class="fa fa-paperclip"></i>
+        </label>
+        <a href="javascript:void(0)" id="video-chat-group">
+          <i class="fa fa-video-camera"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+  <% } else { %>
+  <div class="right tab-pane <% if (index === 0) { %> active <% } %>" data-chat="<%= conversation._id %>"
+    id="to_<%= conversation._id %>">
+    <div class="top">
+      <span>To: <span class="name"><%= conversation.username %></span></span>
+      <span class="chat-menu-right">
+        <a href="#attachmentsModal_<%= conversation._id %>" class="show-attachments" data-toggle="modal">
+          Tệp đính kèm
+          <i class="fa fa-paperclip"></i>
+        </a>
+      </span>
+      <span class="chat-menu-right">
+        <a href="javascript:void(0)">&nbsp;</a>
+      </span>
+      <span class="chat-menu-right">
+        <a href="#imagesModal_<%= conversation._id %>" class="show-images" data-toggle="modal">
+          Hình ảnh
+          <i class="fa fa-photo"></i>
+        </a>
+      </span>
+    </div>
+    <div class="content-chat">
+      <div class="chat" data-chat="<%= conversation._id %>">
+        <% conversation.messages.forEach(function(message) { %> <% if
+          (message.messageType === "text" && message.deletedAt === null) { %>
+        <div class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %>"
+          data-mess-id="<%= message._id %>" id="<%= message._id %>">
+          <%= message.text %> <% if (message.senderId == user._id) { %>
+          <button onclick="removeChatAttachment('<%= message._id %>','<%= message.receiverId %>',false)"
+            class="btn btn-danger">
+            Delete
+          </button>
+          <% } %>
+        </div>
+        <% } %> <% if (message.messageType === "text" && message.deletedAt !==
+          null) { %>
+        <div class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %>"
+          data-mess-id="<%= message._id %>" id="<%= message._id %>">
+          This message has been removed <% if (message.senderId == user._id) { %>
+          <button onclick="restoreChatAttachment('<%= message._id %>','<%= message.receiverId %>',false)"
+            class="btn btn-danger">
+            Restore
+          </button>
+          <% } %>
+        </div>
+        <% } %> <% if (message.messageType === "image" && message.deletedAt === null ) { %>
+        <div class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %> bubble-image-file"
+          data-mess-id="<%= message._id %>" id="<%= message._id %>">
+          <img src="data:<%= message.file.contentType %>;base64,<%= bufferToBase64(message.file.data) %>"
+            class="show-image-chat" />
           <div id="img-chat-modal" class="modal">
             <!-- The Close Button -->
             <span class="close">&times;</span>
 
-            <!-- Modal Content (The Image) -->
-            <img class="modal-content" id="img-chat-modal-content" />
+            <<<<<<< HEAD <!-- Modal Content (The Image) -->
+              <img class="modal-content" id="img-chat-modal-content" />
+              =======
+              <!-- Modal Content (The Image) -->
+              <img class="modal-content" id="img-chat-modal-content" />
           </div>
+          <% if (message.senderId == user._id) { %>
+          <i class="fas fa-clock"></i>
 
+          <button onclick="removeImageChat('<%= message._id %>','<%= message.receiverId %>',false)"
+            class="btn btn-danger">
+            Delete
+          </button>
+          <% } %>
 
+          >>>>>>> a4927bb685722ef3d63991b02c71ad17fc6236b8
+        </div>
+        <% if (message.senderId == user._id) { %>
+        <button onclick="removeImageChat('<%= message._id %>','<%= message.receiverId %>',false)"
+          class="btn btn-danger">
+          Delete
+        </button>
+        <% } %>
+
+        <<<<<<< HEAD </div>
+          <% } %>
           <% if (message.messageType === "image" && message.deletedAt !== null ) { %>
           <div class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %> bubble-image-file"
             data-mess-id="<%= message._id %>" id="<%= message._id %>">
-
+            =======
             <% if (message.senderId == user._id) { %>
-            <button onclick="restoreImageChat('<%= message._id %>','<%= message.receiverId %>',true)"
+            <i class="fas fa-clock"></i>
+
+            <button onclick="restoreImageChat('<%= message._id %>','<%= message.receiverId %>',false)"
               class="btn btn-danger">
               Restore
             </button>
@@ -131,131 +309,12 @@
           <div
             class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %> bubble-attachment-file"
             data-mess-id="<%= message._id %>" id="<%= message._id %>">
-            <img src="/images/users/<%= message.sender.avatar %>" class="avatar-small"
-              title="<%= message.sender.name %>" />
-            <a href="data:<%= message.file.contentType %>;base64,<%= bufferToBase64(message.file.data) %>"
+
+            <a href="data:<%= message.file.contentType %>; base64, <%= bufferToBase64(message.file.data) %>"
               download="<%= message.file.fileName %>">
               <%= message.file.fileName %>
             </a>
-            <% if (message.senderId == user._id) { %>
-            <button onclick="removeChatAttachment('<%= message._id %>','<%= message.receiverId %>',true)"
-              class="btn btn-danger">
-              Remove
-            </button>
-            <% } %>
-          </div>
-          <% } %>
-
-          <% if (message.messageType === "file" && message.deletedAt !== null) { %>
-          <div
-            class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %> bubble-attachment-file"
-            data-mess-id="<%= message._id %>" id="<%= message._id %>">
-            <img src="/images/users/<%= message.sender.avatar %>" class="avatar-small"
-              title="<%= message.sender.name %>" />
-            This message has been removed
-            </a>
-            <% if (message.senderId == user._id) { %>
-            <button onclick="restoreChatAttachment('<%= message._id %>','<%= message.receiverId %>',true)"
-              class="btn btn-danger">
-              Restore
-            </button>
-            <% } %>
-          </div>
-
-          <% } %>
-          <% }); %>
-        </div>
-      </div>
-      <div class="write" data-chat="<%= conversation._id %>">
-        <input type="text" id="write-chat-<%= conversation._id %>" class="write-chat chat-in-group"
-          data-chat="<%= conversation._id %>" />
-        <div class="icons">
-          <a href="#" class="icon-chat" data-chat="<%= conversation._id %>"><i class="fa fa-smile-o"></i></a>
-          <label for="image-chat-<%= conversation._id %>">
-            <input type="file" id="image-chat-<%= conversation._id %>" name="my-image-chat"
-              class="image-chat chat-in-group" data-chat="<%= conversation._id %>" />
-            <i class="fa fa-photo"></i>
-          </label>
-          <label for="attachment-chat-<%= conversation._id %>">
-            <input type="file" id="attachment-chat-<%= conversation._id %>" name="my-attachment-chat"
-              class="attachment-chat chat-in-group" data-chat="<%= conversation._id %>" />
-            <i class="fa fa-paperclip"></i>
-          </label>
-          <a href="javascript:void(0)" id="video-chat-group">
-            <i class="fa fa-video-camera"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-    <% } else { %>
-    <div class="right tab-pane <% if (index === 0) { %> active <% } %>" data-chat="<%= conversation._id %>"
-      id="to_<%= conversation._id %>">
-      <div class="top">
-        <span>To: <span class="name"><%= conversation.username %></span></span>
-        <span class="chat-menu-right">
-          <a href="#attachmentsModal_<%= conversation._id %>" class="show-attachments" data-toggle="modal">
-            Tệp đính kèm
-            <i class="fa fa-paperclip"></i>
-          </a>
-        </span>
-        <span class="chat-menu-right">
-          <a href="javascript:void(0)">&nbsp;</a>
-        </span>
-        <span class="chat-menu-right">
-          <a href="#imagesModal_<%= conversation._id %>" class="show-images" data-toggle="modal">
-            Hình ảnh
-            <i class="fa fa-photo"></i>
-          </a>
-        </span>
-      </div>
-      <div class="content-chat">
-        <div class="chat" data-chat="<%= conversation._id %>">
-          <% conversation.messages.forEach(function(message) { %> <% if
-          (message.messageType === "text" && message.deletedAt === null) { %>
-          <div class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %>"
-            data-mess-id="<%= message._id %>" id="<%= message._id %>">
-            <%= message.text %> <% if (message.senderId == user._id) { %>
-            <button onclick="removeChatAttachment('<%= message._id %>','<%= message.receiverId %>',false)"
-              class="btn btn-danger">
-              Delete
-            </button>
-            <% } %>
-          </div>
-          <% } %> <% if (message.messageType === "text" && message.deletedAt !==
-          null) { %>
-          <div class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %>"
-            data-mess-id="<%= message._id %>" id="<%= message._id %>">
-            This message has been removed <% if (message.senderId == user._id) { %>
-            <button onclick="restoreChatAttachment('<%= message._id %>','<%= message.receiverId %>',false)"
-              class="btn btn-danger">
-              Restore
-            </button>
-            <% } %>
-          </div>
-          <% } %> <% if (message.messageType === "image" && message.deletedAt === null ) { %>
-          <div class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %> bubble-image-file"
-            data-mess-id="<%= message._id %>" id="<%= message._id %>">
-            <img src="data:<%= message.file.contentType %>;base64,<%= bufferToBase64(message.file.data) %>"
-              class="show-image-chat" />
-            <div id="img-chat-modal" class="modal">
-              <!-- The Close Button -->
-              <span class="close">&times;</span>
-
-              <!-- Modal Content (The Image) -->
-              <img class="modal-content" id="img-chat-modal-content" />
-            </div>
-            <% if (message.senderId == user._id) { %>
-            <button onclick="removeImageChat('<%= message._id %>','<%= message.receiverId %>',false)"
-              class="btn btn-danger">
-              Delete
-            </button>
-            <% } %>
-
-          </div>
-          <% } %>
-          <% if (message.messageType === "image" && message.deletedAt !== null ) { %>
-          <div class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %> bubble-image-file"
-            data-mess-id="<%= message._id %>" id="<%= message._id %>">
+            >>>>>>> a4927bb685722ef3d63991b02c71ad17fc6236b8
 
             <% if (message.senderId == user._id) { %>
             <button onclick="restoreImageChat('<%= message._id %>','<%= message.receiverId %>',false)"
@@ -303,32 +362,53 @@
 
           <% } %>
           <% } %> <% }); %>
-        </div>
-      </div>
-      <div class="write" data-chat="<%= conversation._id %>">
-        <input type="text" id="write-chat-<%= conversation._id %>" class="write-chat"
-          data-chat="<%= conversation._id %>" />
-        <div class="icons">
-          <a href="#" class="icon-chat" data-chat="<%= conversation._id %>"><i class="fa fa-smile-o"></i></a>
-          <label for="image-chat-<%= conversation._id %>">
-            <input type="file" id="image-chat-<%= conversation._id %>" name="my-image-chat" class="image-chat"
-              data-chat="<%= conversation._id %>" />
-            <i class="fa fa-photo"></i>
-          </label>
-          <label for="attachment-chat-<%= conversation._id %>">
-            <input type="file" id="attachment-chat-<%= conversation._id %>" name="my-attachment-chat"
-              class="attachment-chat" data-chat="<%= conversation._id %>" />
-            <i class="fa fa-paperclip"></i>
-          </label>
-          <a href="javascript:void(0)" id="video-chat-<%= conversation._id %>" class="video-chat"
-            data-chat="<%= conversation._id %>">
-            <i class="fa fa-video-camera"></i>
-          </a>
-        </div>
       </div>
     </div>
-    <% } %> <% }); %>
+    <div class="write" data-chat="<%= conversation._id %>">
+      <input type="text" id="write-chat-<%= conversation._id %>" class="write-chat"
+        data-chat="<%= conversation._id %>" />
+      <div class="icons">
+        <a href="#" class="icon-chat" data-chat="<%= conversation._id %>"><i class="fa fa-smile-o"></i></a>
+        <label for="image-chat-<%= conversation._id %>">
+          <input type="file" id="image-chat-<%= conversation._id %>" name="my-image-chat" class="image-chat"
+            data-chat="<%= conversation._id %>" />
+          <i class="fa fa-photo"></i>
+        </label>
+        <label for="attachment-chat-<%= conversation._id %>">
+          <input type="file" id="attachment-chat-<%= conversation._id %>" name="my-attachment-chat"
+            class="attachment-chat" data-chat="<%= conversation._id %>" />
+          <i class="fa fa-paperclip"></i>
+        </label>
+        <a href="javascript:void(0)" id="video-chat-<%= conversation._id %>" class="video-chat"
+          data-chat="<%= conversation._id %>">
+          <i class="fa fa-video-camera"></i>
+        </a>
+      </div>
+    </div>
   </div>
-  <!-- Trường hợp tài khoản chưa có bạn bè thì hiện màn hình dưới. -->
+  <% } %> <% }); %>
 </div>
+<!-- Trường hợp tài khoản chưa có bạn bè thì hiện màn hình dưới. -->
 </div>
+<<<<<<< HEAD </div>
+  =======
+
+  <script>
+    function show_menu(me, messageId) {
+      event.preventDefault();
+      $(`#context-menu${messageId}`).css({
+        display: "block",
+        background: "#fff",
+      })
+      console.log("cc")
+      $(`#context-menu${messageId}`).addClass("show");
+      return false; //blocks default Webbrowser right click menu  
+
+      $("#context-menu p").on("click", function () {
+        $(this).parent().removeClass("show").hide();
+      });
+    }
+
+
+  </script>
+  >>>>>>> a4927bb685722ef3d63991b02c71ad17fc6236b8

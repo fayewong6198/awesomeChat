@@ -1,35 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <title>Awesome Chat</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="shortcut icon" href="images/logo_favicon/favicon-trungquandev.png" />
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="bower_components/AlertifyJS/build/css/alertify.css">
-    <link rel="stylesheet" href="bower_components/emojionearea/dist/emojionearea.min.css">
-    <link rel="stylesheet" href="bower_components/photoset-grid/css/colorbox.css">
-    <link rel="stylesheet" href="emojione/extras/css/emojione.min.css">
-    <link rel="stylesheet" href="emojione/extras/css/emojione-awesome.css">
-
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body onload="spinLoaded()">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="shortcut icon"
+      href="images/logo_favicon/favicon-trungquandev.png"
+    />
+    <link
+      rel="stylesheet"
+      href="bower_components/bootstrap/dist/css/bootstrap.css"
+    />
+    <link
+      rel="stylesheet"
+      href="bower_components/font-awesome/css/font-awesome.css"
+    />
+    <link
+      rel="stylesheet"
+      href="bower_components/AlertifyJS/build/css/alertify.css"
+    />
+    <link
+      rel="stylesheet"
+      href="bower_components/emojionearea/dist/emojionearea.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="bower_components/photoset-grid/css/colorbox.css"
+    />
+    <link rel="stylesheet" href="emojione/extras/css/emojione.min.css" />
+    <link rel="stylesheet" href="emojione/extras/css/emojione-awesome.css" />
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body onload="spinLoaded()">
     <!--Icon loader-->
-    <div class="master-loading-style"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-    
-    <input type="hidden" id="ice-server-list" value="<%= iceServerList %>">
+    <div class="master-loading-style">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
 
-    <%- include("alert/alert"); %>
+    <input type="hidden" id="ice-server-list" value="<%= iceServerList %>" />
 
-    <%- include("navbar/navbar"); %>
-    
-    <%- content %>
+    <%- include("alert/alert"); %> <%- include("navbar/navbar"); %> <%- content
+    %>
 
     <!--Libraries-->
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
     <script src="bower_components/jquery.nicescroll/jquery.nicescroll.min.js"></script>
@@ -75,22 +104,12 @@
     <script src="js/addMoreMembersToGroup.js"></script>
     <script src="js/removeMemberFromGroupChat.js"></script>
 
-    <%- include("contact/contactModal"); %>
-
-    <%- include("streaming/streamingModal"); %>    
-
-    <%- include("image/imageModal"); %> 
-    
-    <%- include("attachment/attachmentModal"); %>
-        
-    <%- include("user/userModal"); %> 
-    
-    <%- include("groupChat/groupChatModal"); %>
-
-    <%- include("notification/notificationModal"); %>
-
-    <%- include("groupMember/groupMembersModal"); %>
-
-    <%- include("newMembersGroup/membersModal"); %>
-</body>
+    <%- include("contact/contactModal"); %> <%-
+    include("streaming/streamingModal"); %> <%- include("image/imageModal"); %>
+    <%- include("attachment/attachmentModal"); %> <%- include("user/userModal");
+    %> <%- include("groupChat/groupChatModal"); %> <%-
+    include("notification/notificationModal"); %> <%-
+    include("groupMember/groupMembersModal"); %> <%-
+    include("newMembersGroup/membersModal"); %>
+  </body>
 </html>
