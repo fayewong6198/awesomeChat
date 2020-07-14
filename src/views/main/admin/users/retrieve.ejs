@@ -1,131 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Awesome Chat</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <!-- Latest compiled and minified CSS -->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-    />
 
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<head>
+  <title>Awesome Chat</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
 
-    <!-- Popper JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-  </head>
-  <body>
-    <%- include("../sections/navbar"); %>
-    <%- auth_role %>
-    <div class="row">
-      <div class="col-md-3">
-        <%- include("../sections/left-side"); %>
-      </div>
-      <div class="col-md-9">
-        <div class="container">
-          <form method="POST" action="/admin/users/update/<%-user._id%>">
-            <div class="form-group">
-              <label for="exampleInputEmail1">Email address</label>
-              <input
-                type="email"
-                class="form-control"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
-                placeholder="Enter email"
-                value="<%-user.local.email%>"
-                name="email"
-               <% if (!auth_permistions['UPDATE_USER'] && auth_role != 'admin') { %> readonly <%} %> 
+  <!-- Popper JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 
-              />
-              <small id="emailHelp" class="form-text text-muted"
-                >We'll never share your email with anyone else.</small
-              >
-            </div>
-            <div class="form-group">
-              <label for="username">Username</label>
-              <input
-                type="text"
-                class="form-control"
-                name="username"
-                placeholder="Username"
-                value="<%-user.username%>"
-               <% if (!auth_permistions['UPDATE_USER'] && auth_role != 'admin') { %> readonly <%} %> 
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
 
-              />
-            </div>
+<body>
 
-            <div class="form-group">
-              <label for="phone">Phone</label>
-              <input
-                type="number"
-                class="form-control"
-                name="phone"
-                placeholder="Phone number"
-                value="<%-user.phone%>"
-               <% if (!auth_permistions['UPDATE_USER'] && auth_role != 'admin') { %> readonly <%} %> 
+  <%- include("../sections/navbar"); %>
+  <% if (message !='') { %>
+  <div class="alert alert-<%- className %>" role="alert">
+    <%- message %>
+  </div>
+  <% } %>
+  <%- auth_role %>
+  <div class="row">
+    <div class="col-md-3">
+      <%- include("../sections/left-side"); %>
+    </div>
+    <div class="col-md-9">
+      <div class="container">
+        <form method="POST" action="/admin/users/update/<%-user._id%>">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+              placeholder="Enter email" value="<%-user.local.email%>" name="email"
+              <% if (!auth_permistions['UPDATE_USER'] && auth_role != 'admin') { %> readonly <%} %> />
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+          </div>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" name="username" placeholder="Username" value="<%-user.username%>"
+              <% if (!auth_permistions['UPDATE_USER'] && auth_role != 'admin') { %> readonly <%} %> />
+          </div>
 
-              />
-            </div>
-            <div class="form-group">
-              <label for="phone">Gender</label>
-              <% if (!auth_permistions['UPDATE_USER'] && auth_role != 'admin') { %> <input type="text" class="form-control" readonly value="<%-user.gender%>">  <%} 
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="number" class="form-control" name="phone" placeholder="Phone number" value="<%-user.phone%>"
+              <% if (!auth_permistions['UPDATE_USER'] && auth_role != 'admin') { %> readonly <%} %> />
+          </div>
+          <div class="form-group">
+            <label for="phone">Gender</label>
+            <% if (!auth_permistions['UPDATE_USER'] && auth_role != 'admin') { %> <input type="text"
+              class="form-control" readonly value="<%-user.gender%>"> <%} 
               else { %>
-                <select class="custom-select" name="gender">
-                  <option id="male" value="male" <% if (user.gender == 'male') { %> selected <% } %> >male</option>
-                  <option id="female" value="female" <% if (user.gender == 'female') { %> selected <% } %> >female</option>
-             
-                </select>
-             <% } %>
-              
-            </div>
-            <div class="form-group">
-              <label for="phone">Role</label>
-              <% if (!auth_permistions['CHANGE_ROLE'] && auth_role != 'admin') { %>
-                <input type="text" class="form-control" readonly value="<%-user.role%>">
-             <% } else { %>
-              <select class="custom-select" name="role">
-                <option id="user" value="user"  <% if (user.role == 'user' ) { %> selected <%}%>>user</option>
-                <option id="staff" value="staff" <% if (user.role == 'staff' ) { %> selected <%}%> >staff</option>
-                <% if (auth_role == 'admin') { %>
-                  <option id="admin" value="admin" <% if (user.role == 'admin' ) { %> selected <%}%> >admin</option>
-              <%  } %>
-              </select>
-            <%  } %>
-              
-            </div>
+            <select class="custom-select" name="gender">
+              <option id="male" value="male" <% if (user.gender == 'male') { %> selected <% } %>>male</option>
+              <option id="female" value="female" <% if (user.gender == 'female') { %> selected <% } %>>female</option>
 
-            
-            <% for (let key in permistion_choices) { %>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="permistions" value="<%-key%>" id="<%-key%>" for="<%-key%>"
-               <% if (user_permistions[key]) {%> checked <%} %>
-               <% if (!auth_permistions['CHANGE_PERMISTION'] && auth_role != 'admin') { %> disabled <%} %> 
-               >
-              <label class="form-check-label" for="<%-key%>">
-                <%- permistion_choices[key] %>
-              </label>
-            </div>
+            </select>
             <% } %>
-            <% if (auth_permistions['UPDATE_USER'] == true || auth_role == 'admin') { %> 
-              <button type="submit" class="btn btn-success">Update</button>
-             <% } %>
-            
-          </form>
-          <% if (auth_permistions['DELETE_USER'] == true || auth_role == 'admin') { %>
-            <form method="POST" action="/admin/users/delete/<%=user._id%>"><button type="submit" class="btn btn-danger">Delete</button></form>
 
+          </div>
+          <div class="form-group">
+            <label for="phone">Role</label>
+            <% if (!auth_permistions['CHANGE_ROLE'] && auth_role != 'admin') { %>
+            <input type="text" class="form-control" readonly value="<%-user.role%>">
+            <% } else { %>
+            <select class="custom-select" name="role">
+              <option id="user" value="user" <% if (user.role == 'user' ) { %> selected <%}%>>user</option>
+                <option id="staff" value="staff" <% if (user.role == 'staff' ) { %> selected <%}%> >staff</option>
+                <% if (auth_role == 'admin') { %> <option id="admin" value="admin" <% if (user.role == 'admin' ) { %>
+                selected <%}%> >admin</option>
+              <%  } %> </select>
+                <%  } %>
+
+          </div>
+
+
+          <% for (let key in permistion_choices) { %>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="permistions" value="<%-key%>" id="<%-key%>"
+              for="<%-key%>" <% if (user_permistions[key]) {%> checked <%} %>
+              <% if (!auth_permistions['CHANGE_PERMISTION'] && auth_role != 'admin') { %> disabled <%} %>>
+            <label class="form-check-label" for="<%-key%>">
+              <%- permistion_choices[key] %>
+            </label>
+          </div>
           <% } %>
-          
-        </div>
+          <% if (auth_permistions['UPDATE_USER'] == true || auth_role == 'admin') { %>
+          <button type="submit" class="btn btn-success">Update</button>
+          <% } %>
+
+        </form>
+        <% if (auth_permistions['DELETE_USER'] == true || auth_role == 'admin') { %>
+        <form method="POST" action="/admin/users/delete/<%=user._id%>"><button type="submit"
+            class="btn btn-danger">Delete</button></form>
+
+        <% } %>
+
       </div>
     </div>
-  </body>
+  </div>
+</body>
 
-  <script></script>
+<script></script>
+
 </html>

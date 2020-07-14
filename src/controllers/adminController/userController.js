@@ -10,6 +10,7 @@ const genderChoices = {
   female: "Female",
 };
 
+
 const roleChoices = {
   user: "User",
   staff: "Staff",
@@ -55,6 +56,9 @@ const retrieveUser = async (req, res, next) => {
     for (let i = 0; i < req.user.permistions.length; i++) {
       auth_permistions[req.user.permistions[i]] = true;
     }
+    let message = req.flash('success') || ''
+
+
     return res.render("main/admin/users/retrieve", {
       success: true,
       msg: false,
@@ -63,6 +67,8 @@ const retrieveUser = async (req, res, next) => {
       user_permistions,
       auth_permistions,
       auth_role,
+      message: message,
+      className: "success"
     });
   } catch (error) {
     return res.render("main/admin/users/retrieve");
@@ -184,6 +190,7 @@ const updateUser = async (req, res, next) => {
 
     user.local.email = req.body.email;
     await user.save();
+    await req.flash('success', 'successfully')
     return res.redirect(`/admin/users/${req.params.id}`);
   } catch (error) {
     console.log(error);
