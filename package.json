@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/doanhvo98/awesome_chat#readme",
   "dependencies": {
+    "archiver": "^4.0.2",
     "backup": "^1.1.0",
     "bcrypt": "^4.0.1",
     "bluebird": "^3.5.3",
@@ -36,6 +37,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.25.3",
     "mongodb-backup": "^1.6.9",
+    "mongodb-restore": "^1.6.2",
     "mongoose": "^5.9.21",
     "multer": "^1.4.1",
     "nodemailer": "^4.7.0",
@@ -47,7 +49,9 @@
     "passport.socketio": "^3.7.0",
     "request": "^2.88.0",
     "socket.io": "^2.2.0",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "zip-a-folder": "0.0.12",
+    "zlib": "^1.0.5"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

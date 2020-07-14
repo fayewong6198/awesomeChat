@@ -21,7 +21,7 @@ const postRestore = async (req, res, next) => {
   try {
     backup.restore(
       `${path.resolve()}/website.backup`,
-      `${path.resolve()}/backup`
+      `C:/Users/Faye Wong/Desktop/backup`
     );
     console.log(2);
     return res.redirect("/admin/backup");
