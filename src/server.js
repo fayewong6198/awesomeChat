@@ -4,7 +4,7 @@ import ConnectDB from "./config/connectDB";
 import configViewEngine from "./config/viewEngine";
 import initRoutes from "./routes/web";
 import bodyParser from "body-parser";
-import connectFlash from "connect-flash";
+import flash from "connect-flash";
 import session from "./config/session";
 import passport from "passport";
 import http from "http";
@@ -27,7 +27,10 @@ let io = socketio(server);
 ConnectDB();
 session.config(app), configViewEngine(app);
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(connectFlash());
+
+app.use(flash());
+
+
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
