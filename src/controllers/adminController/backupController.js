@@ -2,7 +2,7 @@ const backup = require("backup");
 var path = require("path");
 
 const getBackUp = async (req, res, next) => {
-  return res.render("main/admin/backup/backup");
+  return res.render("main/admin/backup/backup", { url: "backup" });
 };
 
 const postBackUp = async (req, res, next) => {

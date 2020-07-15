@@ -1,10 +1,45 @@
 <div class="list-group-flush">
-  <a href="/admin/users" class="list-group-item list-group-item-action active">
+  <a
+    id="left-admin-user"
+    href="/admin/users"
+    class="list-group-item list-group-item-action"
+  >
     Users
   </a>
-  <a href="" class="list-group-item list-group-item-action">Chats</a>
-  <a href="#" class="list-group-item list-group-item-action">Group Chats</a>
-  <a href="/admin/backup" class="list-group-item list-group-item-action"
+  <a
+    id="left-admin-chat"
+    href="/admin/chats"
+    class="list-group-item list-group-item-action"
+    >Chats</a
+  >
+  <a
+    id="left-admin-group-chat"
+    href="/admin/groupChats"
+    class="list-group-item list-group-item-action"
+    >Group Chats</a
+  >
+  <a
+    id="left-admin-backup"
+    href="/admin/backup"
+    class="list-group-item list-group-item-action"
     >Recover Website</a
   >
 </div>
+
+<% if (url == 'user') { %>
+<script>
+  $("#left-admin-user").addClass("active");
+</script>
+<% } if (url == 'chat') { %>
+<script>
+  $("#left-admin-chat").addClass("active");
+</script>
+<% } if (url == 'groupChat') { %>
+<script>
+  $("#left-admin-group-chat").addClass("active");
+</script>
+<% } if (url == 'backup') { %>
+<script>
+  $("#left-admin-backup").addClass("active");
+</script>
+<% } %>
