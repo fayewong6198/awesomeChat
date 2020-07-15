@@ -10,7 +10,6 @@ const genderChoices = {
   female: "Female",
 };
 
-
 const roleChoices = {
   user: "User",
   staff: "Staff",
@@ -31,6 +30,7 @@ const listUser = async (req, res, next) => {
     users,
     auth_permistions,
     auth_role,
+    url: "user",
   });
 };
 
@@ -56,8 +56,7 @@ const retrieveUser = async (req, res, next) => {
     for (let i = 0; i < req.user.permistions.length; i++) {
       auth_permistions[req.user.permistions[i]] = true;
     }
-    let message = req.flash('success') || ''
-
+    let message = req.flash("success") || "";
 
     return res.render("main/admin/users/retrieve", {
       success: true,
@@ -68,7 +67,8 @@ const retrieveUser = async (req, res, next) => {
       auth_permistions,
       auth_role,
       message: message,
-      className: "success"
+      className: "success",
+      url: "user",
     });
   } catch (error) {
     return res.render("main/admin/users/retrieve");
@@ -79,7 +79,10 @@ const retrieveUser = async (req, res, next) => {
 // admin role
 const createUser = async (req, res, next) => {
   try {
-    return res.render("main/admin/users/create", { msg: req.flash("msg") });
+    return res.render("main/admin/users/create", {
+      msg: req.flash("msg"),
+      url: "user",
+    });
   } catch (error) {
     return res.render("main/admin/users/create");
   }
@@ -190,7 +193,7 @@ const updateUser = async (req, res, next) => {
 
     user.local.email = req.body.email;
     await user.save();
-    await req.flash('success', 'successfully')
+    await req.flash("success", "successfully");
     return res.redirect(`/admin/users/${req.params.id}`);
   } catch (error) {
     console.log(error);

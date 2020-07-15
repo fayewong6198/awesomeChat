@@ -9,6 +9,8 @@ import {
   groupChat,
   adminUser,
   backup,
+  adminChat,
+  adminGroupChat,
 } from "./../controllers/index";
 import {
   authValid,
@@ -285,6 +287,12 @@ let initRoutes = (app) => {
       auth.checkRoles("staff", "admin"),
       backup.postRestore
     );
+
+  router.route("/admin/chats").get(adminChat.list);
+  router.route("/admin/chats/:id").get(adminChat.retrieve);
+  router.route("/admin/groupChats").get(adminGroupChat.list);
+  router.route("/admin/groupChats/:id").get(adminGroupChat.retrieve);
+
   return app.use("/", router);
 };
 
