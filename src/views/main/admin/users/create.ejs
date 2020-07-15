@@ -33,11 +33,13 @@
         <%- include("../sections/left-side"); %>
       </div>
       <div class="col-md-9">
-        Create User
-
         <div class="container">
-          <a href="/admin/users"
-            ><button class="btn btn-success float-right">Back</button></a
+          <a
+            href="/admin/users"
+            class="btn btn-info"
+            tabindex="-1"
+            role="button"
+            >< Back to List</a
           >
           <br />
           <form method="POST" action="/admin/users/create">

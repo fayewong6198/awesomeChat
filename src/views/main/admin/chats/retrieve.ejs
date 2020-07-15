@@ -19,16 +19,94 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <style>
+      /* Groupchat CSS */
+      .message-candidate {
+        background: rgba(223, 229, 121, 0.9);
+        padding: 40px;
+        max-width: 600px;
+        margin-bottom: 10px;
+      }
+
+      .message-hiring-manager {
+        background: rgba(0, 167, 204, 0.9);
+        padding: 40px;
+        max-width: 600px;
+        margin-bottom: 10px;
+      }
+
+      .messaging {
+        max-width: 600px;
+        margin-top: 20px;
+      }
+
+      .message-text {
+        margin-top: 10px;
+      }
+
+      .message-photo {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: center center;
+        display: inline-block;
+      }
+
+      .message-name {
+        margin-left: 10px;
+        display: inline-block;
+      }
+    </style>
   </head>
 
   <body>
+    <%- include("../sections/navbar"); %>
     <div class="row">
       <div class="col-md-3">
         <%- include("../sections/left-side"); %>
       </div>
       <div class="col-md-9">
+        <h2 class="text-center">Chat</h2>
         <div class="container">
-          Retrieve Chat
+          <div class="message-candidate center-block">
+            <div class="row">
+              <div class="col-xs-8 col-md-6">
+                <img
+                  src="http://imgc.allpostersimages.com/images/P-473-488-90/68/6896/2GOJ100Z/posters/despicable-me-2-minions-movie-poster.jpg"
+                  class="message-photo"
+                />
+                <h4 class="message-name">Mr. Minion</h4>
+              </div>
+              <div class="col-xs-4 col-md-6 text-right message-date">
+                Date here
+              </div>
+            </div>
+            <div class="row message-text">
+              text over here text over here text over here text over here text
+              over here text over here text over here text over here text over
+              here
+            </div>
+          </div>
+          <div class="message-hiring-manager center-block">
+            <div class="row">
+              <div class="col-xs-8 col-md-6">
+                <img
+                  src="http://imgc.allpostersimages.com/images/P-473-488-90/68/6896/2GOJ100Z/posters/despicable-me-2-minions-movie-poster.jpg"
+                  class="message-photo"
+                />
+                <h4 class="message-name">Mr. Minion</h4>
+              </div>
+              <div class="col-xs-4 col-md-6 text-right message-date">
+                Date here
+              </div>
+            </div>
+            <div class="row message-text">
+              text over here text over here text over here text over here text
+              over here text over here text over here text over here text over
+              here
+            </div>
+          </div>
         </div>
       </div>
     </div>
