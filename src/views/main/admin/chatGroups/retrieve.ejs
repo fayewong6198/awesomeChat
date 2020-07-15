@@ -70,25 +70,44 @@
       <div class="col-md-9">
         <h2 class="text-center">Chat</h2>
         <div class="container">
-          <div class="message-candidate center-block">
+          <% for (let i = 0; i < messages.length; i++) { %>
+          <div
+            class="message-<% if (messages[i].senderId == groupChat.members[0].userId) { %>candidate<% } else { %>hiring-manager<% }%> candidate center-block"
+          >
             <div class="row">
               <div class="col-xs-8 col-md-6">
                 <img
-                  src="http://imgc.allpostersimages.com/images/P-473-488-90/68/6896/2GOJ100Z/posters/despicable-me-2-minions-movie-poster.jpg"
+                  src="/images/users/<%- messages[i].sender.avatar %>"
                   class="message-photo"
                 />
-                <h4 class="message-name">Mr. Minion</h4>
+                <h4 class="message-name"><%- messages[i].sender.name %></h4>
               </div>
               <div class="col-xs-4 col-md-6 text-right message-date">
-                Date here
+                <%- messages[i].createdAt %>
               </div>
             </div>
+            <% if (messages[i].messageType == 'text') { %>
             <div class="row message-text">
-              text over here text over here text over here text over here text
-              over here text over here text over here text over here text over
-              here
+              <%- messages[i].text %>
             </div>
+            <% }%> <% if (messages[i].messageType == 'image') { %>
+            <img
+              src="data:<%- messages[i].file.contentType %>;base64,<%- bufferToBase64(messages[i].file.data) %>"
+              class=""
+            />
+            <% } %> <% if (messages[i].messageType == 'file') { %>
+            <a
+              href="data:<%= messages[i].file.contentType %>;base64,<%= bufferToBase64(messages[i].file.data) %>"
+              download="<%= messages[i].file.fileName %>"
+            >
+              <%= messages[i].file.fileName %>
+            </a>
+            <% } %> <% if (messages[i].deletedAt != null) { %>
+            <small> This message has been removed</small>
+            <% } %>
           </div>
+          <% } %>
+
           <div class="message-hiring-manager center-block">
             <div class="row">
               <div class="col-xs-8 col-md-6">
