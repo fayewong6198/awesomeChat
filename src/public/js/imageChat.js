@@ -41,7 +41,7 @@ function imageChat(divId) {
           };
 
           let myMessage = $(
-            `<div class="bubble me bubble-image-file" data-mess-id="${data.message._id}"></div>`
+            `<div class="bubble me bubble-image-file" data-mess-id="${data.message._id}  oncontextmenu="show_menu('true','${data.message._id}' )""></div>`
           );
           let imageChat = `<img src="data:${
             data.message.file.contentType
@@ -131,23 +131,37 @@ function removeImageChat(messageId, reciverId, isChatGroup) {
         $(`#${data.message._id}`).html(`${senderAvatar} ${imageChat}`);
 
         $(`#${data.message._id}`).append(
-          `<button
+          `
+        <div
+        class="dropdown-menu right-click-menu context-menu"
+        id="context-menu${data.message._id}"
+      >
+        <p
+          class="dropdown-item"
           onclick="restoreImageChat('${data.message._id}','${data.message.receiverId}',${data.group})"
-          class="btn btn-danger"
         >
-          Restore
-        </button>`
+        Restore
+        </p>
+      </div>
+        `
         );
       } else {
         $(`#${data.message._id}`).html(`${imageChat}`);
 
         $(`#${data.message._id}`).append(
-          `<button
+          `
+        <div
+        class="dropdown-menu right-click-menu context-menu"
+        id="context-menu${data.message._id}"
+      >
+        <p
+          class="dropdown-item"
           onclick="restoreImageChat('${data.message._id}','${data.message.receiverId}',${data.group})"
-          class="btn btn-danger"
         >
-          Restore
-        </button>`
+        Restore
+        </p>
+      </div>
+        `
         );
       }
 
@@ -193,22 +207,36 @@ function restoreImageChat(messageId, reciverId, isChatGroup) {
         $(`#${messageId}`).html(`${senderAvatar} ${imageChat}`);
 
         $(`#${data.message._id}`).append(
-          `<button
+          `
+        <div
+        class="dropdown-menu right-click-menu context-menu"
+        id="context-menu${data.message._id}"
+      >
+        <p
+          class="dropdown-item"
           onclick="removeImageChat('${data.message._id}','${data.message.receiverId}',${data.group})"
-          class="btn btn-danger"
         >
-          Delete
-        </button>`
+        Delete
+        </p>
+      </div>
+        `
         );
       } else {
         $(`#${messageId}`).html(imageChat);
         $(`#${data.message._id}`).append(
-          `<button
+          `
+        <div
+        class="dropdown-menu right-click-menu context-menu"
+        id="context-menu${data.message._id}"
+      >
+        <p
+          class="dropdown-item"
           onclick="removeImageChat('${data.message._id}','${data.message.receiverId}',${data.group})"
-          class="btn btn-danger"
         >
-          Delete
-        </button>`
+        Delete
+        </p>
+      </div>
+        `
         );
       }
 
@@ -304,12 +332,19 @@ $(document).ready(function () {
     $(`#${response.messageId}`).html(`${avatar}${imageChat}`);
     if (response.currentUserId === $("#dropdown-navbar-user").data("uid")) {
       $(`#${response.messageId}`).append(
-        `<button
+        `
+        <div
+        class="dropdown-menu right-click-menu context-menu"
+        id="context-menu${response.message._id}"
+      >
+        <p
+          class="dropdown-item"
           onclick="removeImageChat('${response.message._id}','${response.message.receiverId}',${response.group})"
-          class="btn btn-danger"
         >
-          Delete
-        </button>`
+        Delete
+        </p>
+      </div>
+        `
       );
     }
   });
@@ -322,12 +357,19 @@ $(document).ready(function () {
     $(`#${response.messageId}`).html(`${avatar}${imageChat}`);
     if (response.currentUserId === $("#dropdown-navbar-user").data("uid")) {
       $(`#${response.messageId}`).append(
-        `<button
+        `
+        <div
+        class="dropdown-menu right-click-menu context-menu"
+        id="context-menu${response.message._id}"
+      >
+        <p
+          class="dropdown-item"
           onclick="restoreImageChat('${response.message._id}','${response.message.receiverId}',${response.group})"
-          class="btn btn-danger"
         >
           Restore
-        </button>`
+        </p>
+      </div>
+        `
       );
     }
   });

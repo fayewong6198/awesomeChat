@@ -31,12 +31,8 @@ function textAndEmojiChat(divId) {
           let isChatGroup =
             data.message.conversationType == "group" ? true : false;
           let myMessage = $(
-            `<div id="${data.message._id}" class="bubble me" id="${
-              data.message._id
-            }" data-mess-id="${data.message._id}" 
-            oncontextmenu="show_menu('${
-              data.message.sender.id == data.currentUserId
-            }','${data.message._id}' )"></div>`
+            `<div id="${data.message._id}" class="bubble me" id="${data.message._id}" data-mess-id="${data.message._id}" 
+            oncontextmenu="show_menu('true','${data.message._id}' )"></div>`
           );
           myMessage.text(data.message.text);
           let convertEmojioneMessage = emojione.toImage(myMessage.html());
@@ -55,7 +51,7 @@ function textAndEmojiChat(divId) {
           } else {
             myMessage.html(`${convertEmojioneMessage} 
           
-          <div class="dropdown-menu right-click-menu context-menu" id="context-menu<%- message._id %>">  
+          <div class="dropdown-menu right-click-menu context-menu" id="context-menu${data.message._id}">  
 	<p class="dropdown-item menu-delete" onclick="removeTextEmoji('${data.message._id}','${data.message.receiverId}',${isChatGroup})">Delete</p>
 </div>
           `);

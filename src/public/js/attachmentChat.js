@@ -38,9 +38,9 @@ function attachmentChat(divId) {
           let dataToEmit = {
             message: data.message,
           };
-
+          console.log(data);
           let myMessage = $(
-            `<div class="bubble me bubble-attachment-file" data-mess-id="${data.message._id}" id="${data.message._id}"></div>`
+            `<div class="bubble me bubble-attachment-file" data-mess-id="${data.message._id}" id="${data.message._id}"  oncontextmenu="show_menu('${data.message.senderId} ==  user._id %>','${data.message._id}' )"></div>`
           );
           let attachmentChat = `<a href="data:${
             data.message.file.contentType
@@ -53,22 +53,35 @@ function attachmentChat(divId) {
           if (isChatGroup) {
             let senderAvatar = `<img src="/images/users/${data.message.sender.avatar}" class="avatar-small" title="${data.message.sender.name}" />`;
             myMessage.html(`${senderAvatar} ${attachmentChat}
-            <button
+            
+          <div
+          class="dropdown-menu right-click-menu context-menu"
+          id="context-menu${data.message._id}"
+        >
+          <p
+            class="dropdown-item"
             onclick="removeChatAttachment('${data.message._id}','${data.message.receiverId}',${isChatGroup})"
-            class="btn btn-danger"
           >
-            Remove
-          </button>
+          Remove
+          </p>
+        </div>
             `);
             increaseNumberMessageGroup(divId);
             dataToEmit.groupId = targetId;
           } else {
-            myMessage.html(`${attachmentChat}<button
+            myMessage.html(`${attachmentChat}
+          <div
+          class="dropdown-menu right-click-menu context-menu"
+          id="context-menu${data.message._id}"
+        >
+          <p
+            class="dropdown-item"
             onclick="removeChatAttachment('${data.message._id}','${data.message.receiverId}',${isChatGroup})"
-            class="btn btn-danger"
           >
-            Remove
-          </button>`);
+          Remove
+          </p>
+        </div>
+          `);
             dataToEmit.contactId = targetId;
           }
 
@@ -151,12 +164,20 @@ function removeChatAttachment(messageId, reciverId, isChatGroup) {
       $(`#${response.message._id}`).html(`${avatar}${text}`);
 
       $(`#${response.message._id}`).append(
-        `<button
+        `
+      <div
+      class="dropdown-menu right-click-menu context-menu"
+      id="context-menu${response.message._id}"
+    >
+      <p
+        class="dropdown-item"
         onclick="restoreChatAttachment('${response.message._id}','${response.message.receiverId}',${response.group})"
-        class="btn btn-danger"
       >
-        Restore
-      </button>`
+      Restore
+      </p>
+    </div>
+      
+      `
       );
     },
     error: function (response) {
@@ -195,12 +216,20 @@ function restoreChatAttachment(messageId, reciverId, isChatGroup) {
 
       $(`#${response.message._id}`).html(`${avatar}${attachmentChat}`);
       $(`#${response.message._id}`).append(
-        `<button
+        `
+      <div
+      class="dropdown-menu right-click-menu context-menu"
+      id="context-menu${response.message._id}"
+    >
+      <p
+        class="dropdown-item"
         onclick="removeChatAttachment('${response.message._id}','${response.message.receiverId}',${response.group})"
-        class="btn btn-danger"
       >
-        Remove
-      </button>`
+      Remove
+      </p>
+    </div>
+
+      `
       );
       console.log("append success");
       console.log($(`#${response.message._id}`));
@@ -295,12 +324,19 @@ $(document).ready(function () {
     $(`#${response.messageId}`).html(`${avatar}${text}`);
     if (response.currentUserId === $("#dropdown-navbar-user").data("uid")) {
       $(`#${response.messageId}`).append(
-        `<button
+        `
+      <div
+      class="dropdown-menu right-click-menu context-menu"
+      id="context-menu${response.message._id}"
+    >
+      <p
+        class="dropdown-item"
         onclick="restoreChatAttachment('${response.message._id}','${response.message.receiverId}',${response.group})"
-        class="btn btn-danger"
       >
-        Restore
-      </button>`
+      Restore
+      </p>
+    </div>
+      `
       );
     }
   });
@@ -317,12 +353,19 @@ $(document).ready(function () {
     $(`#${response.messageId}`).html(`${avatar}${attachmentChat}`);
     if (response.currentUserId === $("#dropdown-navbar-user").data("uid")) {
       $(`#${response.messageId}`).append(
-        `<button
+        `
+        <div
+        class="dropdown-menu right-click-menu context-menu"
+        id="context-menu${response.message._id}"
+      >
+        <p
+          class="dropdown-item"
           onclick="removeChatAttachment('${response.message._id}','${response.message.receiverId}',${response.group})"
-          class="btn btn-danger"
         >
           Delete
-        </button>`
+        </p>
+      </div>
+        `
       );
     }
   });

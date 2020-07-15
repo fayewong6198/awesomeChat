@@ -478,8 +478,7 @@
             <% } %>
           </div>
           <% if (message.messageType === "file" && message.deletedAt !== null) {
-          %>
-
+          %> fgfgfg
           <div
             class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %> bubble-attachment-file"
             data-mess-id="<%= message._id %>"
@@ -559,6 +558,7 @@
     $(`#context-menu${messageId}`).css({
       display: "block",
       background: "#fff",
+      top: "50%",
     });
     $(`#context-menu${messageId}`).addClass("show");
     return false; //blocks default Webbrowser right click menu
