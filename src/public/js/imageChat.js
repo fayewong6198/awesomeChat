@@ -41,7 +41,7 @@ function imageChat(divId) {
           };
 
           let myMessage = $(
-            `<div class="bubble me bubble-image-file" data-mess-id="${data.message._id}  oncontextmenu="show_menu('true','${data.message._id}' )""></div>`
+            `<div class="bubble me bubble-image-file" data-mess-id="${data.message._id}" id="${data.message._id}" oncontextmenu="show_menu('true','${data.message._id}')"></div>`
           );
           let imageChat = `<img src="data:${
             data.message.file.contentType
@@ -49,14 +49,42 @@ function imageChat(divId) {
             data.message.file.data.data
           )}" class="show-image-chat">`;
 
+          console.log(data);
           if (isChatGroup) {
             let senderAvatar = `<img src="/images/users/${data.message.sender.avatar}" class="avatar-small" title="${data.message.sender.name}" />`;
             myMessage.html(`${senderAvatar} ${imageChat}`);
+            myMessage.append(`
+            <div
+            class="dropdown-menu right-click-menu context-menu"
+            id="context-menu${data.message._id}"
+          >
+            <p
+              class="dropdown-item"
+              onclick="removeImageChat('${data.message._id}','${data.message.receiverId}',true)"
+            >
+            Delete
+            </p>
+          </div>
+            `);
+
             increaseNumberMessageGroup(divId);
             dataToEmit.groupId = targetId;
           } else {
             myMessage.html(imageChat);
             dataToEmit.contactId = targetId;
+            myMessage.append(`
+            <div
+            class="dropdown-menu right-click-menu context-menu"
+            id="context-menu${data.message._id}"
+          >
+            <p
+              class="dropdown-item"
+              onclick="removeImageChat('${data.message._id}','${data.message.receiverId}',false)"
+            >
+            Delete
+            </p>
+          </div>
+            `);
           }
 
           $(`.right .chat[data-chat=${divId}]`).append(myMessage);

@@ -434,7 +434,8 @@
             id="<%= message._id %>"
             oncontextmenu="show_menu('<%- message.senderId ==  user._id %>','<%- message._id %>' )"
           >
-            <% if (message.senderId == user._id) { %>
+            This message has been removed <% if (message.senderId == user._id) {
+            %>
             <div
               class="dropdown-menu right-click-menu context-menu"
               id="context-menu<%- message._id %>"
@@ -462,7 +463,6 @@
             >
               <%= message.file.fileName %>
             </a>
-
             <% if (message.senderId == user._id) { %>
             <div
               class="dropdown-menu right-click-menu context-menu"
@@ -477,8 +477,8 @@
             </div>
             <% } %>
           </div>
-          <% if (message.messageType === "file" && message.deletedAt !== null) {
-          %> fgfgfg
+          <% } %> <% if (message.messageType == "file" && message.deletedAt !==
+          null) { %> cc
           <div
             class="bubble <% if (message.senderId == user._id) { %> me <% } else { %> you <% } %> bubble-attachment-file"
             data-mess-id="<%= message._id %>"
@@ -501,7 +501,7 @@
             <% } %>
           </div>
 
-          <% } %> <% } %> <% }); %>
+          <% } %> <% }); %>
         </div>
         <div class="write" data-chat="<%= conversation._id %>">
           <input
