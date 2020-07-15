@@ -29,61 +29,71 @@
   <% } %>
   <%- auth_role %>
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-3 pl-0">
       <%- include("../sections/left-side"); %>
     </div>
-    <div class="col-md-9">
-      <div class="container">
+    <div class="col-md-9 pr-0">
+        <!-- Grid info user -->
         <form method="POST" action="/admin/users/update/<%-user._id%>">
-          <div class="form-group">
+          <div class="form-group p-3">
             <label for="exampleInputEmail1">Email address</label>
             <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
               placeholder="Enter email" value="<%-user.local.email%>" name="email"
               <% if (!auth_permistions['UPDATE_USER'] && auth_role != 'admin') { %> readonly <%} %> />
             <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
           </div>
-          <div class="form-group">
+          <div class="form-group p-3">
             <label for="username">Username</label>
             <input type="text" class="form-control" name="username" placeholder="Username" value="<%-user.username%>"
               <% if (!auth_permistions['UPDATE_USER'] && auth_role != 'admin') { %> readonly <%} %> />
           </div>
 
-          <div class="form-group">
+          <div class="form-group p-3">
             <label for="phone">Phone</label>
             <input type="number" class="form-control" name="phone" placeholder="Phone number" value="<%-user.phone%>"
               <% if (!auth_permistions['UPDATE_USER'] && auth_role != 'admin') { %> readonly <%} %> />
           </div>
-          <div class="form-group">
-            <label for="phone">Gender</label>
-            <% if (!auth_permistions['UPDATE_USER'] && auth_role != 'admin') { %> <input type="text"
-              class="form-control" readonly value="<%-user.gender%>"> <%} 
-              else { %>
-            <select class="custom-select" name="gender">
-              <option id="male" value="male" <% if (user.gender == 'male') { %> selected <% } %> >male</option>
-              <option id="female" value="female" <% if (user.gender == 'female') { %> selected <% } %>>female</option>
-
-            </select>
-            <% } %>
-
-          </div>
-          <div class="form-group">
-            <label for="phone">Role</label>
-            <% if (!auth_permistions['CHANGE_ROLE'] && auth_role != 'admin') { %>
-            <input type="text" class="form-control" readonly value="<%-user.role%>">
-            <% } else { %>
-            <select class="custom-select" name="role">
-              <option id="user" value="user" <% if (user.role == 'user' ) { %> selected <%}%>>user</option>
-                <option id="staff" value="staff" <% if (user.role == 'staff' ) { %> selected <%}%> >staff</option>
-                <% if (auth_role == 'admin') { %> <option id="admin" value="admin" <% if (user.role == 'admin' ) { %>
-                selected <%}%> >admin</option>
-              <%  } %> </select>
-                <%  } %>
-
-          </div>
 
 
+          <!-- Grid Gender and Role -->
+          <div class="container">
+            <div class="row">
+              <div class="col-sm">
+                <div class="form-group">
+                  <label for="phone">Gender</label>
+                  <% if (!auth_permistions['UPDATE_USER'] && auth_role != 'admin') { %> <input type="text"
+                    class="form-control" readonly value="<%-user.gender%>"> <%} 
+                    else { %>
+                  <select class="custom-select" name="gender">
+                    <option id="male" value="male" <% if (user.gender == 'male') { %> selected <% } %> >male</option>
+                    <option id="female" value="female" <% if (user.gender == 'female') { %> selected <% } %>>female</option>
+
+                  </select>
+                  <% } %>
+                </div>
+              </div>
+              <div class="col-sm">
+                <div class="form-group">
+                  <label for="phone">Role</label>
+                  <% if (!auth_permistions['CHANGE_ROLE'] && auth_role != 'admin') { %>
+                  <input type="text" class="form-control" readonly value="<%-user.role%>">
+                  <% } else { %>
+                  <select class="custom-select" name="role">
+                    <option id="user" value="user" <% if (user.role == 'user' ) { %> selected <%}%>>user</option>
+                      <option id="staff" value="staff" <% if (user.role == 'staff' ) { %> selected <%}%> >staff</option>
+                      <% if (auth_role == 'admin') { %> <option id="admin" value="admin" <% if (user.role == 'admin' ) { %>
+                      selected <%}%> >admin</option>
+                    <%  } %> </select>
+                      <%  } %>
+                </div>
+              </div>
+            </div>
+          </div>    
+    
+          <!-- Check permissions -->
+          <div class="row justify-content-center m-3">
           <% for (let key in permistion_choices) { %>
-          <div class="form-check">
+          <div class="form-check p-3">
             <input class="form-check-input" type="checkbox" name="permistions" value="<%-key%>" id="<%-key%>"
               for="<%-key%>" <% if (user_permistions[key]) {%> checked <%} %>
               <% if (!auth_permistions['CHANGE_PERMISTION'] && auth_role != 'admin') { %> disabled <%} %>>
@@ -92,22 +102,34 @@
             </label>
           </div>
           <% } %>
-          <% if (auth_permistions['UPDATE_USER'] == true || auth_role == 'admin') { %>
-          <button type="submit" class="btn btn-success">Update</button>
-          <% } %>
+          </div>
 
+          <!-- Grid buttons update info and delete user -->
+          <div class="row justify-content-center mb-3">
+            <div class="col-5">
+              <% if (auth_permistions['UPDATE_USER'] == true || auth_role == 'admin') { %>
+                <button type="submit" class="btn btn-success btn-block">Update</button>
+                <% } %>
+            </div>
+         
+          </div>
+            
         </form>
-        <% if (auth_permistions['DELETE_USER'] == true || auth_role == 'admin') { %>
-        <form method="POST" action="/admin/users/delete/<%=user._id%>"><button type="submit"
-            class="btn btn-danger">Delete</button></form>
-
-        <% } %>
-
-      </div>
+        <div class="row justify-content-center">
+          <div class="col-5">
+          <% if (auth_permistions['DELETE_USER'] == true || auth_role == 'admin') { %>
+            <form method="POST" action="/admin/users/delete/<%=user._id%>"><button type="submit"
+                class="btn btn-danger  btn-block">Delete User</button></form>
+    
+            <% } %>
+          </div>
+        </div>
     </div>
   </div>
 </body>
 
-<script></script>
+<script>
+  
+</script>
 
 </html>
