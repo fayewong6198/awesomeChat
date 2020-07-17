@@ -1,0 +1,50 @@
+[
+  {
+    "local": {
+      "isActive": true,
+      "email": "admin@gmail.com",
+      "password": "$2b$07$DwP9O1umL7vbT15Xqs5QvO.lZtCYtZd/uZHt4ND0ZnG0PgfbZW11y",
+      "verifyToken": "adc413ed-2e53-43f4-b390-d53ced15b509"
+    },
+    "gender": "male",
+    "phone": "0898316029",
+    "address": null,
+    "avatar": "avatar-default.jpg",
+    "role": "admin",
+    "resetPasswordToken": null,
+    "permistions": [
+      "BACK_UP",
+      "CREATE_USER",
+      "UPDATE_USER",
+      "DELETE_USER",
+      "CHANGE_ROLE",
+      "CHANGE_PERMISTION"
+    ],
+    "updatedAt": null,
+    "deletedAt": null,
+    "_id": "5f015326f13e942d307d910a",
+    "username": "admin",
+    "createdAt": 1593922342450,
+    "__v": 0
+  },
+  {
+    "local": {
+      "isActive": true,
+      "email": "trandaosimanh@gmail.com",
+      "password": "$2b$07$5K/CoWtI0fgDqifH8V8WROtRG35agCYF0dcEUX2nHy6ldrm5Q3m4S"
+    },
+    "gender": "male",
+    "phone": "0898316029",
+    "address": null,
+    "avatar": "avatar-default.jpg",
+    "role": "staff",
+    "resetPasswordToken": null,
+    "permistions": ["CREATE_USER", "CHANGE_ROLE", "CHANGE_PERMISTION"],
+    "updatedAt": null,
+    "deletedAt": null,
+    "_id": "5f098f2b12768c28fcfe467d",
+    "username": "trandaosimanh@gmail.com",
+    "createdAt": 1594461995509,
+    "__v": 0
+  }
+]

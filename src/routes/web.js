@@ -280,6 +280,14 @@ let initRoutes = (app) => {
       auth.checkRoles("staff", "admin"),
       backup.postBackUp
     );
+
+  router
+    .route("/admin/backup/database")
+    .post(
+      auth.checkLoggedIn,
+      auth.checkRoles("staff", "admin"),
+      backup.postBackupDatabase
+    );
   router
     .route("/admin/restore")
     .post(

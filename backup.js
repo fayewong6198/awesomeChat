@@ -10,10 +10,8 @@
 var file_system = require("fs");
 var archiver = require("archiver");
 const path = require("path");
-var output = file_system.createWriteStream("target.zip");
+var output = file_system.createWriteStream(`${path.resolve()}/backup/cc.zip`);
 var archive = archiver("zip");
-
-console.log("cc");
 
 output.on("close", function () {
   console.log(archive.pointer() + " total bytes");
@@ -29,5 +27,5 @@ archive.on("error", function (err) {
 archive.pipe(output);
 
 // append files from a sub-directory and naming it `new-subdir` within the archive (see docs for more options):
-archive.directory(path.resolve(), false);
+archive.directory(`${path.resolve()}`, false);
 archive.finalize();
