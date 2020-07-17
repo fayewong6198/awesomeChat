@@ -30,14 +30,17 @@
       </div>
       <div class="col-md-9">
         <form action="/admin/backup" method="POST">
-          <button type="submit" value="submit" class="btn btn-primary">
+          <button type="submit" value="submit" class="btn btn-primary m-3">
             Back up
           </button>
+          <span class="text-left">Save your backup file.</span>
         </form>
+
         <form action="/admin/restore" method="POST">
-          <button type="submit" value="submit" class="btn btn-primary">
+          <button type="submit" value="submit" class="btn btn-danger m-3">
             Restore
           </button>
+          <span class="text-left">Restore your file.</span>
         </form>
         <form action="/admin/backup/database" method="POST">
           <button type="submit" value="submit" class="btn btn-success">

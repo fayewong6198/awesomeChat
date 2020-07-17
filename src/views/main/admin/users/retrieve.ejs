@@ -21,20 +21,25 @@
 
 <body>
 
+  <!-- Navbar -->
   <%- include("../sections/navbar"); %>
-  <% if (message !='') { %>
-  <div class="alert alert-<%- className %>" role="alert">
-    <%- message %>
-  </div>
-  <% } %>
-  <%- auth_role %>
-  <div class="row">
+
+  <!-- Content -->
+  <div class="row m-0">
+    <!-- Left-side bar -->
     <div class="col-md-3 pl-0">
       <%- include("../sections/left-side"); %>
     </div>
+    <!-- Right-side content -->
     <div class="col-md-9 pr-0">
+      <!-- Alert -->
+      <% if (message !== '') { %>
+        <div class="alert alert-<%- className %>" role="alert">
+          <%- message %>
+        </div>
+        <% } %>
       <a href="/admin/users" class="btn btn-info " tabindex="-1" role="button">< Back to List</a>
-
+     
         <!-- Grid info user -->
         <form method="POST" action="/admin/users/update/<%-user._id%>">
           <div class="form-group p-3">
@@ -110,7 +115,7 @@
          
 
           <!-- Grid buttons update info and delete user -->
-          <div class="row justify-content-center mb-3">
+          <div class="row justify-content-center m-3">
             <div class="col-5">
               <% if (auth_permistions['UPDATE_USER'] == true || auth_role == 'admin') { %>
                 <button type="submit" class="btn btn-success btn-block">Update</button>
@@ -120,7 +125,7 @@
           </div>
             
         </form>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center m-3">
           <div class="col-5">
           <% if (auth_permistions['DELETE_USER'] == true || auth_role == 'admin') { %>
             <form method="POST" action="/admin/users/delete/<%=user._id%>"><button type="submit"
