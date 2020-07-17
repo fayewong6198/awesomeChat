@@ -23,26 +23,29 @@ const getBackUp = async (req, res, next) => {
 const postBackUp = async (req, res, next) => {
   try {
     const date = Date.now();
-    var output = file_system.createWriteStream(
-      `${path.resolve()}/backup/awesome_chat.zip`
-    );
-
-    output.on("close", function () {
-      console.log(archive.pointer() + " total bytes");
-      console.log(
-        "archiver has been finalized and the output file descriptor has closed."
+    fs.mkdir(`${path.resolve()}/src/backup/`, { recursive: true }, (err) => {
+      if (err) throw err;
+      const output = file_system.createWriteStream(
+        `${path.resolve()}/src/backup/awesome_chat.zip`
       );
+
+      output.on("close", function () {
+        console.log(archive.pointer() + " total bytes");
+        console.log(
+          "archiver has been finalized and the output file descriptor has closed."
+        );
+      });
+
+      archive.on("error", function (err) {
+        throw err;
+      });
+
+      archive.pipe(output);
+
+      // append files from a sub-directory and naming it `new-subdir` within the archive (see docs for more options):
+      archive.directory(path.resolve(), false);
+      archive.finalize();
     });
-
-    archive.on("error", function (err) {
-      throw err;
-    });
-
-    archive.pipe(output);
-
-    // append files from a sub-directory and naming it `new-subdir` within the archive (see docs for more options):
-    archive.directory(path.resolve(), false);
-    archive.finalize();
 
     return res.redirect("/admin/backup");
   } catch (error) {
@@ -80,12 +83,12 @@ const postBackupDatabase = async (req, res, next) => {
     const contacts = await Contact.find();
     const date = Date.now();
     fs.mkdir(
-      `${path.resolve()}/backupMongoose/${date}`,
+      `${path.resolve()}/src/backupMongoose/${date}`,
       { recursive: true },
       (err) => {
         if (err) throw err;
         fs.writeFile(
-          `${path.resolve()}/backupMongoose/${date}/users.json`,
+          `${path.resolve()}/src/backupMongoose/${date}/users.json`,
           JSON.stringify(users),
           "utf8",
           function (err) {
@@ -95,7 +98,7 @@ const postBackupDatabase = async (req, res, next) => {
         );
 
         fs.writeFile(
-          `${path.resolve()}/backupMongoose/${date}/chat-groups.json`,
+          `${path.resolve()}/src/backupMongoose/${date}/chat-groups.json`,
           JSON.stringify(chatGroups),
           "utf8",
           function (err) {
@@ -104,7 +107,7 @@ const postBackupDatabase = async (req, res, next) => {
           }
         );
         fs.writeFile(
-          `${path.resolve()}/backupMongoose/${date}/messages.json`,
+          `${path.resolve()}/src/backupMongoose/${date}/messages.json`,
           JSON.stringify(messages),
           "utf8",
           function (err) {
@@ -113,7 +116,7 @@ const postBackupDatabase = async (req, res, next) => {
           }
         );
         fs.writeFile(
-          `${path.resolve()}/backupMongoose/${date}/constacts.json`,
+          `${path.resolve()}/src/backupMongoose/${date}/constacts.json`,
           JSON.stringify(contacts),
           "utf8",
           function (err) {
@@ -122,7 +125,7 @@ const postBackupDatabase = async (req, res, next) => {
           }
         );
         fs.writeFile(
-          `${path.resolve()}/backupMongoose/${date}/notifications.json`,
+          `${path.resolve()}/src/backupMongoose/${date}/notifications.json`,
           JSON.stringify(notifications),
           "utf8",
           function (err) {
