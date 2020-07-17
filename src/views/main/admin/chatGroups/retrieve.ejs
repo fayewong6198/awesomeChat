@@ -23,17 +23,20 @@
     <style>
       /* Groupchat CSS */
       .message-candidate {
-        background: rgba(223, 229, 121, 0.9);
-        padding: 40px;
-        max-width: 600px;
-        margin-bottom: 10px;
+        background: #2cc66e;
+        padding: 5px 20px;
+        max-width: 40%;
+        border-radius: 10px;
+        margin-bottom: 20px;
       }
 
       .message-hiring-manager {
-        background: rgba(0, 167, 204, 0.9);
-        padding: 40px;
-        max-width: 600px;
-        margin-bottom: 10px;
+        margin-left: auto;
+        background: #3c93f2;
+        padding: 5px 20px;
+        max-width: 40%;
+        border-radius: 10px;
+        margin-bottom: 20px;
       }
 
       .messaging {
@@ -42,12 +45,17 @@
       }
 
       .message-text {
-        margin-top: 10px;
+        color: white;
+        word-break: break-all;
+      }
+
+      .message-date {
+        margin-left: auto;
       }
 
       .message-photo {
-        width: 40px;
-        height: 40px;
+        width: 16px;
+        height: 16px;
         border-radius: 50%;
         object-fit: cover;
         object-position: center center;
@@ -55,8 +63,35 @@
       }
 
       .message-name {
-        margin-left: 10px;
+        margin: 0 10px;
         display: inline-block;
+      }
+
+      .message-remove {
+        color: #8f0303;
+      }
+
+      .content-chat {
+        width: 100%;
+        height: 80vh;
+        padding: 15px 29px;
+        background-color: #fff;
+      }
+      .chat {
+        height: 100%;
+        overflow: auto;
+        position: relative;
+        padding: 0 35px 35px;
+        border-width: 1px 1px 1px 0;
+        border-style: solid;
+        border-color: #e6e6e6;
+        -webkit-box-pack: end;
+        -ms-flex-pack: end;
+        justify-content: flex-end;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
       }
     </style>
   </head>
@@ -70,61 +105,49 @@
       <div class="col-md-9">
         <h2 class="text-center">Chat</h2>
         <div class="container">
-          <% for (let i = 0; i < messages.length; i++) { %>
-          <div
-            class="message-<% if (messages[i].senderId == groupChat.members[0].userId) { %>candidate<% } else { %>hiring-manager<% }%> candidate center-block"
-          >
-            <div class="row">
-              <div class="col-xs-8 col-md-6">
-                <img
-                  src="/images/users/<%- messages[i].sender.avatar %>"
-                  class="message-photo"
-                />
-                <h4 class="message-name"><%- messages[i].sender.name %></h4>
-              </div>
-              <div class="col-xs-4 col-md-6 text-right message-date">
-                <%- messages[i].createdAt %>
-              </div>
-            </div>
-            <% if (messages[i].messageType == 'text') { %>
-            <div class="row message-text">
-              <%- messages[i].text %>
-            </div>
-            <% }%> <% if (messages[i].messageType == 'image') { %>
-            <img
-              src="data:<%- messages[i].file.contentType %>;base64,<%- bufferToBase64(messages[i].file.data) %>"
-              class=""
-            />
-            <% } %> <% if (messages[i].messageType == 'file') { %>
-            <a
-              href="data:<%= messages[i].file.contentType %>;base64,<%= bufferToBase64(messages[i].file.data) %>"
-              download="<%= messages[i].file.fileName %>"
-            >
-              <%= messages[i].file.fileName %>
-            </a>
-            <% } %> <% if (messages[i].deletedAt != null) { %>
-            <small> This message has been removed</small>
-            <% } %>
-          </div>
-          <% } %>
+          <div class="content-chat">
+            <div class="chat">
+              <% for (let i = 0; i < messages.length; i++) { %>
+              <div
+                class="message-<% if (messages[i].senderId == groupChat.members[0].userId) { %>candidate<% } else { %>hiring-manager<% }%> candidate center-block"
+              >
+                <div class="row">
+                  <div class="col-xs-3">
+                    <img
+                      src="/images/users/<%- messages[i].sender.avatar %>"
+                      class="message-photo"
+                    />
+                    <h6 class="message-name"><%- messages[i].sender.name %></h6>
+                  </div>
 
-          <div class="message-hiring-manager center-block">
-            <div class="row">
-              <div class="col-xs-8 col-md-6">
-                <img
-                  src="http://imgc.allpostersimages.com/images/P-473-488-90/68/6896/2GOJ100Z/posters/despicable-me-2-minions-movie-poster.jpg"
-                  class="message-photo"
-                />
-                <h4 class="message-name">Mr. Minion</h4>
+                  <% if (messages[i].messageType == 'text') { %>
+                  <div class="col-xs-6 message-text">
+                    <h6><%- messages[i].text %></h6>
+                    <% if (messages[i].deletedAt != null) { %>
+                    <span class="message-remove">
+                      This message has been removed</span
+                    >
+                    <% } %>
+                  </div>
+                  <% }%> <% if (messages[i].messageType == 'image') { %>
+                  <img
+                    src="data:<%- messages[i].file.contentType %>;base64,<%- bufferToBase64(messages[i].file.data) %>"
+                    class=""
+                  />
+                  <% } %> <% if (messages[i].messageType == 'file') { %>
+                  <a
+                    href="data:<%= messages[i].file.contentType %>;base64,<%= bufferToBase64(messages[i].file.data) %>"
+                    download="<%= messages[i].file.fileName %>"
+                  >
+                    <%= messages[i].file.fileName %>
+                  </a>
+                  <% } %>
+                  <div class="col-xs-3 message-date">
+                    <%- convertTimestampToHumanTime(messages[i].createdAt) %>
+                  </div>
+                </div>
               </div>
-              <div class="col-xs-4 col-md-6 text-right message-date">
-                Date here
-              </div>
-            </div>
-            <div class="row message-text">
-              text over here text over here text over here text over here text
-              over here text over here text over here text over here text over
-              here
+              <% } %>
             </div>
           </div>
         </div>

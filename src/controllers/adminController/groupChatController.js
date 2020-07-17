@@ -31,6 +31,7 @@ const retrieve = async (req, res, next) => {
       sender: req.query.sender,
       groupChat,
       bufferToBase64,
+      convertTimestampToHumanTime,
     });
   } catch (error) {
     console.log(error);
