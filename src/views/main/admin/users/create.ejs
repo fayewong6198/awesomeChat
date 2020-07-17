@@ -22,21 +22,28 @@
     <!-- <link rel="stylesheet" href="/css/style.css" /> -->
   </head>
   <body>
-    <%- include("../sections/navbar"); %> <% if (msg) { %>
-    <div class="alert alert-danger" role="alert">
-      <%- msg %>
-    </div>
-    <% } %>
+    <!-- Navbar -->
+    <%- include("../sections/navbar"); %>
 
+    <!-- Content -->
     <div class="row">
+      <!-- Left-side bar -->
       <div class="col-md-3">
         <%- include("../sections/left-side"); %>
       </div>
+      <!-- Right-side content -->
       <div class="col-md-9">
+        <!-- Alert -->
+        <% if (msg) { %>
+        <div class="alert alert-danger" role="alert">
+          <%- msg %>
+        </div>
+        <% } %>
+        <!-- Main form -->
         <div class="container">
           <a
             href="/admin/users"
-            class="btn btn-info"
+            class="btn btn-info m-3"
             tabindex="-1"
             role="button"
             >< Back to List</a
@@ -87,21 +94,38 @@
                 placeholder="Phone number"
               />
             </div>
-            <div class="form-group">
-              <label for="phone">Gender</label>
-              <select class="custom-select" name="gender">
-                <option value="male" selected>male</option>
-                <option value="female">female</option>
-              </select>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <div class="form-group">
+                    <label for="phone">Gender</label>
+                    <select class="custom-select" name="gender">
+                      <option value="male" selected>male</option>
+                      <option value="female">female</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm">
+                  <div class="form-group">
+                    <label for="phone">Role</label>
+                    <select class="custom-select" name="role">
+                      <option value="user" selected>user</option>
+                      <option value="staff">staff</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="phone">Role</label>
-              <select class="custom-select" name="role">
-                <option value="user" selected>user</option>
-                <option value="staff">staff</option>
-              </select>
+
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-5">
+                  <button type="submit" class="btn btn-success btn-block">
+                    Submit
+                  </button>
+                </div>
+              </div>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
           </form>
         </div>
       </div>

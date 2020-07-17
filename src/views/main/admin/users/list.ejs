@@ -24,8 +24,8 @@
   <body>
     <%- include("../sections/navbar"); %>
 
-    <div class="row">
-      <div class="col-md-3">
+    <div class="row m-0">
+      <div class="col-md-3 pl-0">
         <%- include("../sections/left-side"); %>
       </div>
       <div class="col-md-9">
@@ -33,7 +33,7 @@
         <% if (auth_permistions['CREATE_USER'] == true || auth_role == 'admin')
         { %>
         <a href="/admin/users/create"
-          ><button class="btn btn-light">Create new</button>
+          ><button class="btn btn-info m-3">Create new</button>
         </a>
         <% } %>
 
