@@ -26,10 +26,15 @@ const listUser = async (req, res, next) => {
   }
   const users = await User.find();
 
+  let message = req.flash("success") || false;
+  let error = req.flash("error");
+
   return res.render("main/admin/users/list", {
     users,
     auth_permistions,
     auth_role,
+    message,
+    error,
     url: "user",
   });
 };
@@ -56,17 +61,19 @@ const retrieveUser = async (req, res, next) => {
     for (let i = 0; i < req.user.permistions.length; i++) {
       auth_permistions[req.user.permistions[i]] = true;
     }
-    let message = req.flash("success") || "";
-
+    let message = req.flash("success") || false;
+    let error = req.flash("error");
+    console.log(message);
     return res.render("main/admin/users/retrieve", {
       success: true,
       msg: false,
       user,
+      error,
       permistion_choices,
       user_permistions,
       auth_permistions,
       auth_role,
-      message: message,
+      message,
       className: "success",
       url: "user",
     });
@@ -79,8 +86,12 @@ const retrieveUser = async (req, res, next) => {
 // admin role
 const createUser = async (req, res, next) => {
   try {
+    let message = req.flash("success") || false;
+    let error = req.flash("error");
+    console.log(message);
     return res.render("main/admin/users/create", {
-      msg: req.flash("msg"),
+      message,
+      error,
       url: "user",
     });
   } catch (error) {
@@ -110,11 +121,9 @@ const postCreateUser = async (req, res, next) => {
     let user = await User.findOne({ "local.email": req.body.email });
     console.log(user);
     if (user) {
-      return res.render("main/admin/users/create", {
-        success: false,
-        msg: "User with this email already exits",
-        class: "danger",
-      });
+      await req.flash("error", "Email already exits");
+
+      return res.redirect("/admin/users/create");
     }
 
     user = new User(req.body);
@@ -127,16 +136,12 @@ const postCreateUser = async (req, res, next) => {
     // Success
     await user.save();
 
-    req.flash("msg", "Create User Success");
-    req.flash("class", "success");
+    req.flash("success", "Create User Success");
 
     return res.redirect("/admin/users");
   } catch (error) {
-    return res.render("main/admin/users/create", {
-      success: false,
-      msg: "some error occur",
-      class: "danger",
-    });
+    await req.flash("error", "There is some error");
+    return res.redirect(`/admin/users/create`);
   }
 };
 
@@ -161,11 +166,8 @@ const updateUser = async (req, res, next) => {
     let user = await User.findById(req.params.id);
 
     if (!user) {
-      return res.render("main/admin/users/retrieve", {
-        success: false,
-        msg: "User not found",
-        class: "danger",
-      });
+      await req.flash("error", "User not found");
+      return res.redirect(`/admin/users/${req.params.id}`);
     }
 
     if (!req.body.permistions) {
@@ -193,10 +195,12 @@ const updateUser = async (req, res, next) => {
 
     user.local.email = req.body.email;
     await user.save();
-    await req.flash("success", "successfully");
+
+    await req.flash("success", "Update user successfully");
     return res.redirect(`/admin/users/${req.params.id}`);
   } catch (error) {
     console.log(error);
+    await req.flash("error", "There is some error");
     return res.redirect(`/admin/users/${req.params.id}`);
   }
 };
@@ -206,8 +210,10 @@ const updateUser = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
   try {
     let user = await User.findByIdAndDelete(req.params.id);
+    await req.flash("success", "Delete user successfully");
     return res.redirect("/admin/users");
   } catch (error) {
+    await req.flash("error", "There is some error");
     return res.render(`main/admin/users/${req.params.id}`);
   }
 };

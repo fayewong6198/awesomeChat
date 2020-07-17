@@ -27,6 +27,8 @@
 
     <!-- Content -->
     <div class="row">
+      <!-- Alert -->
+
       <!-- Left-side bar -->
       <div class="col-md-3">
         <%- include("../sections/left-side"); %>
@@ -34,11 +36,16 @@
       <!-- Right-side content -->
       <div class="col-md-9">
         <!-- Alert -->
-        <% if (msg) { %>
+        <% if (message.length > 0) { %>
+        <div class="alert alert-success" role="alert">
+          <%- message %>
+        </div>
+        <% } %> <% if (error.length > 0) { %>
         <div class="alert alert-danger" role="alert">
-          <%- msg %>
+          <%- error %>
         </div>
         <% } %>
+
         <!-- Main form -->
         <div class="container">
           <a

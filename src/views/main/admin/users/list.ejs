@@ -25,10 +25,21 @@
     <%- include("../sections/navbar"); %>
 
     <div class="row m-0">
+      <!-- Alert -->
+
       <div class="col-md-3 pl-0">
         <%- include("../sections/left-side"); %>
       </div>
       <div class="col-md-9">
+        <% if (message != false) { %>
+        <div class="alert alert-success" role="alert">
+          <%- message %>
+        </div>
+        <% } %> <% if (error.length > 0) { %>
+        <div class="alert alert-danger" role="alert">
+          <%- error %>
+        </div>
+        <% } %>
         <h1 class="text-primary">List User</h1>
         <% if (auth_permistions['CREATE_USER'] == true || auth_role == 'admin')
         { %>

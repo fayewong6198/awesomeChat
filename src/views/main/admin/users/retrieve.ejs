@@ -33,11 +33,17 @@
     <!-- Right-side content -->
     <div class="col-md-9 pr-0">
       <!-- Alert -->
-      <% if (message !== '') { %>
-        <div class="alert alert-<%- className %>" role="alert">
+      
+      <% if (message.length > 0) { %>
+        <div class="alert alert-success" role="alert">
           <%- message %>
         </div>
         <% } %>
+        <% if (error.length > 0) { %>
+          <div class="alert alert-danger" role="alert">
+            <%- error %>
+          </div>
+          <% } %> 
       <a href="/admin/users" class="btn btn-info " tabindex="-1" role="button">< Back to List</a>
      
         <!-- Grid info user -->
