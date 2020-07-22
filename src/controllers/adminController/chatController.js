@@ -24,7 +24,7 @@ const retrieve = async (req, res, next) => {
     messages,
     bufferToBase64,
     convertTimestampToHumanTime,
-    user: req.params.id,
+    sender: req.params.id,
   });
 };
 
