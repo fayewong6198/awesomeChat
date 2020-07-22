@@ -102,7 +102,7 @@
       <%- include("../sections/left-side"); %>
     </div>
     <div class="col-md-9">
-      <h2 class="text-center">Chat</h2>
+      <h2 class="text-center">Group Chat</h2>
 
       <div class="container">
         <form class=" row" action="/admin/groupChats/<%- groupChat._id %>?sender=<%- groupChat.members[0].userId%>&"
@@ -110,12 +110,13 @@
           <input type="date" class="form-control col-md-2 mx-2" placeholder="Nhập thời gian" name="times"
             value="<%-selectedDate %>">
 
-          <button type=submit class="btn btn-outline-secondary mx-2">filter</button>
+          <button type=submit class="btn btn-outline-info mx-2">Filter</button>
         </form>
         </form>
 
         <div class="content-chat">
           <div class="chat">
+            <% if (messages.lenght>0) { %>
             <% for (let i = 0; i < messages.length; i++) { %>
             <div
               class="message-<% if (messages[i].senderId == groupChat.members[0].userId) { %>candidate<% } else { %>hiring-manager<% }%> candidate center-block">
@@ -147,7 +148,8 @@
                 </div>
               </div>
             </div>
-            <% } %>
+            <% } %>  <% }
+             else {%><h5 class="text-center m-3">No data</h5><%} %> 
           </div>
         </div>
       </div>
