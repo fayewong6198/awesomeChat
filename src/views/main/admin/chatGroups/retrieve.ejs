@@ -10,7 +10,10 @@
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
     />
-
+    <link
+      rel="shortcut icon"
+      href="/images/logo_favicon/favicon-trungquandev.png"
+    />
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -149,6 +152,19 @@
               </div>
             </div>
           </form>
+
+          <div class="row justify-content-center">
+            <div class="col-xs-12">
+              <form
+                action="/admin/groupChats/<%- groupChat._id %>?sender=<%- groupChat.members[0].userId%>"
+                method="GET"
+              >
+                <button class="btn btn-success" type="Submit">
+                  Read all message
+                </button>
+              </form>
+            </div>
+          </div>
 
           <div class="content-chat">
             <div class="chat">

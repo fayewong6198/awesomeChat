@@ -7,6 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <!-- Latest compiled and minified CSS -->
     <link
+      rel="shortcut icon"
+      href="/images/logo_favicon/favicon-trungquandev.png"
+    />
+    <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
     />
@@ -147,6 +151,16 @@
               </div>
             </div>
           </form>
+
+          <div class="row justify-content-center">
+            <div class="col-xs-12">
+              <form action="/admin/chats/<%- sender %>" method="GET">
+                <button class="btn btn-success" type="Submit">
+                  Read all message
+                </button>
+              </form>
+            </div>
+          </div>
 
           <div class="content-chat">
             <div class="chat">
