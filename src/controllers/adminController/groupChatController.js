@@ -19,18 +19,21 @@ const list = async (req, res, next) => {
 
 // @dest admin/groupChats/:id
 const retrieve = async (req, res, next) => {
-  let timesAgo = req.query.times || moment(Date.now()).format("YYYY-MM-DD")
   try {
     const groupChat = await GroupChat.findById(req.params.id);
     if (!groupChat) {
-
       return res.redirect("/admin/groupChats");
     }
     let messages = await Message.model.find({ receiverId: req.params.id });
 
-    messages = messages.filter(x => {
-      return moment(x.createdAt).diff(moment(timesAgo), 'Day') === 0
-    })
+    let timesAgo = req.query.times || moment(Date.now()).format("YYYY-MM-DD");
+
+    if (req.query.times) {
+      messages = messages.filter((x) => {
+        return moment(x.createdAt).diff(moment(timesAgo), "Day") === 0;
+      });
+    }
+
     return res.render("main/admin/chatGroups/retrieve", {
       messages,
       url: "groupChat",
@@ -38,8 +41,8 @@ const retrieve = async (req, res, next) => {
       groupChat,
       bufferToBase64,
       convertTimestampToHumanTime,
-      selectedDate: timesAgo
-    })
+      selectedDate: timesAgo || moment(Date.now()).format("YYYY-MM-DD"),
+    });
   } catch (error) {
     console.log(error);
     return res.redirect("/admin/groupChats");
