@@ -53,10 +53,10 @@ const postBackUp = async (req, res, next) => {
       archive.directory(path.resolve(), false);
       archive.finalize();
     });
-
+    await req.flash("success", "Backup Sucessfull");
     return res.redirect("/admin/backup");
   } catch (error) {
-    console.log(3);
+    await req.flash("success", "Backup Error Sucessfull");
     console.log(error);
     return res.redirect("/admin/backup");
   }
