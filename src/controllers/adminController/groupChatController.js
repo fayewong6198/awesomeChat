@@ -14,6 +14,7 @@ const list = async (req, res, next) => {
   return res.render("main/admin/chatGroups/list", {
     groupChats,
     url: "groupChat",
+    auth: req.user,
   });
 };
 
@@ -42,6 +43,7 @@ const retrieve = async (req, res, next) => {
       bufferToBase64,
       convertTimestampToHumanTime,
       selectedDate: timesAgo || moment(Date.now()).format("YYYY-MM-DD"),
+      auth: req.user,
     });
   } catch (error) {
     console.log(error);

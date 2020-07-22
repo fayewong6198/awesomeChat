@@ -33,7 +33,7 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">id</th>
+              <th scope="col">ID</th>
               <th scope="col">Group Name</th>
               <th scope="col">Users</th>
             </tr>
@@ -41,7 +41,7 @@
           <tbody>
             <% for (let i = 0; i < groupChats.length; i++) { %>
             <tr>
-              <th scope="row"><%- groupChats[i]._id %></th>
+              <th scope="row"><%- i+1 %></th>
               <td>
                 <a
                   href="/admin/groupChats/<%- groupChats[i]._id %>?sender=<%- groupChats[i].members[0].userId%>"

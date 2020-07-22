@@ -18,12 +18,14 @@
     class="list-group-item list-group-item-action"
     >Group Chats</a
   >
+  <% if(auth.permistions.includes('BACK_UP')||auth.role=="admin") { %>
   <a
     id="left-admin-backup"
     href="/admin/backup"
     class="list-group-item list-group-item-action"
     >Recover Website</a
   >
+  <%} %>
 </div>
 
 <% if (url == 'user') { %>

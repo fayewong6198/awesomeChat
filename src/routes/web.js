@@ -278,6 +278,7 @@ let initRoutes = (app) => {
     .post(
       auth.checkLoggedIn,
       auth.checkRoles("staff", "admin"),
+      auth.checkPermistions("BACK_UP"),
       backup.postBackUp
     );
 
@@ -286,6 +287,7 @@ let initRoutes = (app) => {
     .post(
       auth.checkLoggedIn,
       auth.checkRoles("staff", "admin"),
+      auth.checkPermistions("BACK_UP"),
       backup.postBackupDatabase
     );
   router

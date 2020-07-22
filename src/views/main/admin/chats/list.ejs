@@ -34,23 +34,19 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">id</th>
+              <th scope="col">ID</th>
               <th scope="col">User Name</th>
-              <th scope="col">Users</th>
-              <th scope="col">Handle</th>
             </tr>
           </thead>
           <tbody>
             <% for (let i = 0; i < users.length; i++) { %>
             <tr>
-              <th scope="row">1</th>
+              <th scope="row"><%- i+1 %></th>
               <td>
                 <a href="/admin/chats/<%- users[i]._id %>"
                   ><%- users[i].username %></a
                 >
               </td>
-              <td>Otto</td>
-              <td>@mdo</td>
             </tr>
             <% } %>
           </tbody>

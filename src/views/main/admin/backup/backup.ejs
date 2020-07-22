@@ -22,8 +22,15 @@
     <!-- <link rel="stylesheet" href="/css/style.css" /> -->
   </head>
   <body>
-    <%- include("../sections/navbar"); %>
-
+    <%- include("../sections/navbar"); %> <% if (message.length > 0) { %>
+    <div class="alert alert-success" role="alert">
+      <%- message %>
+    </div>
+    <% } %> <% if (error.length > 0) { %>
+    <div class="alert alert-danger" role="alert">
+      <%- error %>
+    </div>
+    <% } %>
     <div class="row">
       <div class="col-md-3">
         <%- include("../sections/left-side"); %>
@@ -36,12 +43,10 @@
           <span class="text-left">Save your backup file.</span>
         </form>
 
-        <form action="/admin/restore" method="POST">
-          <form action="/admin/backup/database" method="POST">
-            <button type="submit" value="submit" class="btn btn-success m-3">
-              Backup Database
-            </button>
-          </form>
+        <form action="/admin/backup/database" method="POST">
+          <button type="submit" value="submit" class="btn btn-success m-3">
+            Backup Database
+          </button>
         </form>
       </div>
     </div>

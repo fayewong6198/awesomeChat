@@ -36,6 +36,7 @@ const listUser = async (req, res, next) => {
     message,
     error,
     url: "user",
+    auth: req.user,
   });
 };
 
@@ -76,6 +77,7 @@ const retrieveUser = async (req, res, next) => {
       message,
       className: "success",
       url: "user",
+      auth: req.user,
     });
   } catch (error) {
     return res.render("main/admin/users/retrieve");
@@ -93,6 +95,7 @@ const createUser = async (req, res, next) => {
       message,
       error,
       url: "user",
+      auth: req.user,
     });
   } catch (error) {
     return res.render("main/admin/users/create");

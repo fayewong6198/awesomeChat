@@ -20,9 +20,9 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <style>
-      /* Groupchat CSS */
+      /* Chat CSS */
       .message-candidate {
-        background: #2cc66e;
+        background: #dfe3ee;
         padding: 5px 20px;
         max-width: 40%;
         border-radius: 10px;
@@ -31,7 +31,7 @@
 
       .message-hiring-manager {
         margin-left: auto;
-        background: #3c93f2;
+        background: #00c6ff;
         padding: 5px 20px;
         max-width: 40%;
         border-radius: 10px;
@@ -93,6 +93,18 @@
         -ms-flex-direction: column;
         flex-direction: column;
       }
+
+      .message-image {
+        max-width: 50%;
+      }
+
+      .message-hiring-manager .message-linkfile {
+        color: #fff;
+      }
+
+      .message-candidate .message-text {
+        color: black;
+      }
     </style>
   </head>
 
@@ -106,47 +118,82 @@
         <h2 class="text-center">Chat</h2>
 
         <div class="container">
-          <% for (let i = 0; i < messages.length; i++) { %>
-          <div
-            class="message-<% if (messages[i].senderId == sender) { %>candidate<% } else { %>hiring-manager<% }%> candidate center-block"
+          <form
+            class="row align-items-center justify-content-between"
+            action="/admin/chats/<%- sender %>"
+            method="GET"
           >
-            <div class="row">
-              <div class="col-xs-3">
-                <img
-                  src="/images/users/<%- messages[i].sender.avatar %>"
-                  class="message-photo"
-                />
-                <h6 class="message-name"><%- messages[i].sender.name %></h6>
-              </div>
-
-              <% if (messages[i].messageType == 'text') { %>
-              <div class="col-xs-6 message-text">
-                <h6><%- messages[i].text %></h6>
-                <% if (messages[i].deletedAt != null) { %>
-                <span class="message-remove">
-                  This message has been removed</span
-                >
-                <% } %>
-              </div>
-              <% }%> <% if (messages[i].messageType == 'image') { %>
-              <img
-                src="data:<%- messages[i].file.contentType %>;base64,<%- bufferToBase64(messages[i].file.data) %>"
-                class=""
-              />
-              <% } %> <% if (messages[i].messageType == 'file') { %>
-              <a
-                href="data:<%= messages[i].file.contentType %>;base64,<%= bufferToBase64(messages[i].file.data) %>"
-                download="<%= messages[i].file.fileName %>"
-              >
-                <%= messages[i].file.fileName %>
-              </a>
-              <% } %>
-              <div class="col-xs-3 message-date">
-                <%- convertTimestampToHumanTime(messages[i].createdAt) %>
+            <a
+              href="/admin/chats"
+              class="col-md-2 col-sm-6 btn btn-info m-3"
+              tabindex="-1"
+              role="button"
+              >< Back to List</a
+            >
+            <div class="col-sm-12 col-md-7 m-2">
+              <div class="row align-items-center justify-content-end">
+                <div class="col-md-6">
+                  <input
+                    type="date"
+                    class="form-control"
+                    placeholder="Nhập thời gian"
+                    name="times"
+                    value="<%-selectedDate %>"
+                  />
+                </div>
+                <button type="submit" class="btn btn-outline-info m-2">
+                  Filter
+                </button>
               </div>
             </div>
+          </form>
+
+          <div class="content-chat">
+            <div class="chat">
+              <% for (let i = 0; i < messages.length; i++) { %>
+              <div
+                class="message-<% if (messages[i].senderId !== sender) { %>candidate<% } else { %>hiring-manager<% }%> candidate center-block"
+              >
+                <div class="row">
+                  <div class="col-xs-3">
+                    <img
+                      src="/images/users/<%- messages[i].sender.avatar %>"
+                      class="message-photo"
+                    />
+                    <h6 class="message-name"><%- messages[i].sender.name %></h6>
+                  </div>
+
+                  <% if (messages[i].messageType == 'text') { %>
+                  <div class="col-xs-6 message-text">
+                    <h6><%- messages[i].text %></h6>
+                    <% if (messages[i].deletedAt != null) { %>
+                    <span class="message-remove">
+                      This message has been removed</span
+                    >
+                    <% } %>
+                  </div>
+                  <% }%> <% if (messages[i].messageType == 'image') { %>
+                  <img
+                    src="data:<%- messages[i].file.contentType %>;base64,<%- bufferToBase64(messages[i].file.data) %>"
+                    class="message-image"
+                  />
+                  <% } %> <% if (messages[i].messageType == 'file') { %>
+                  <a
+                    href="data:<%= messages[i].file.contentType %>;base64,<%= bufferToBase64(messages[i].file.data) %>"
+                    download="<%= messages[i].file.fileName %>"
+                    class="message-linkfile"
+                  >
+                    <%= messages[i].file.fileName %>
+                  </a>
+                  <% } %>
+                  <div class="col-xs-3 message-date">
+                    <%- convertTimestampToHumanTime(messages[i].createdAt) %>
+                  </div>
+                </div>
+              </div>
+              <% } %>
+            </div>
           </div>
-          <% } %>
         </div>
       </div>
     </div>

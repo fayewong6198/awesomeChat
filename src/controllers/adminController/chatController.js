@@ -10,13 +10,25 @@ import {
 
 const list = async (req, res, next) => {
   const users = await User.find();
-  return res.render("main/admin/chats/list", { url: "chat", users });
+  return res.render("main/admin/chats/list", {
+    url: "chat",
+    users,
+    auth: req.user,
+  });
 };
 
 const retrieve = async (req, res, next) => {
-  const messages = await Message.model.find({
+  let messages = await Message.model.find({
     $or: [{ senderId: req.params.id }, { receiverId: req.params.id }],
   });
+
+  let timesAgo = req.query.times || moment(Date.now()).format("YYYY-MM-DD");
+
+  if (req.query.times) {
+    messages = messages.filter((x) => {
+      return moment(x.createdAt).diff(moment(timesAgo), "Day") === 0;
+    });
+  }
 
   console.log(messages);
   return res.render("main/admin/chats/retrieve", {
@@ -25,6 +37,8 @@ const retrieve = async (req, res, next) => {
     bufferToBase64,
     convertTimestampToHumanTime,
     sender: req.params.id,
+    selectedDate: timesAgo || moment(Date.now()).format("YYYY-MM-DD"),
+    auth: req.user,
   });
 };
 

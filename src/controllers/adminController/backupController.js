@@ -17,7 +17,14 @@ const archiver = require("archiver");
 const archive = archiver("zip");
 
 const getBackUp = async (req, res, next) => {
-  return res.render("main/admin/backup/backup", { url: "backup" });
+  let message = req.flash("success") || false;
+  let error = req.flash("error");
+  return res.render("main/admin/backup/backup", {
+    url: "backup",
+    auth: req.user,
+    message,
+    error,
+  });
 };
 
 const postBackUp = async (req, res, next) => {
@@ -75,7 +82,7 @@ const postBackupDatabase = async (req, res, next) => {
     console.log(
       `${process.env.DB_CONNECTION}://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
     );
-
+    console.log(1);
     const users = await User.find();
     const chatGroups = await ChatGroup.find();
     const messages = await Message.model.find();
@@ -92,7 +99,10 @@ const postBackupDatabase = async (req, res, next) => {
           JSON.stringify(users),
           "utf8",
           function (err) {
-            if (err) throw err;
+            if (err) {
+              console.log(err);
+              throw err;
+            }
             console.log("User create successfully");
           }
         );
@@ -106,6 +116,7 @@ const postBackupDatabase = async (req, res, next) => {
             console.log("Chat groups create successfully");
           }
         );
+
         fs.writeFile(
           `${path.resolve()}/src/backupMongoose/${date}/messages.json`,
           JSON.stringify(messages),
@@ -136,9 +147,11 @@ const postBackupDatabase = async (req, res, next) => {
       }
     );
 
+    await req.flash("success", "Backup Mongoose Sucessfull");
     return res.redirect("/admin/backup");
   } catch (error) {
     console.log(error);
+    await req.flash("error", "Some errors occur");
     return res.redirect("/admin/backup");
   }
 };
