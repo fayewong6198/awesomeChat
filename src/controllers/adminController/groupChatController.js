@@ -1,10 +1,12 @@
 import GroupChat from "../../models/chatGroupModel";
 import Message from "../../models/messageModel";
+import moment from "moment";
 import {
   bufferToBase64,
   lastItemOfArray,
   convertTimestampToHumanTime,
 } from "../../helpers/clientHelper";
+import { times } from "lodash";
 
 // @dest admin/groupChats/
 const list = async (req, res, next) => {
@@ -17,14 +19,18 @@ const list = async (req, res, next) => {
 
 // @dest admin/groupChats/:id
 const retrieve = async (req, res, next) => {
+  let timesAgo = req.query.times || moment(Date.now()).format("YYYY-MM-DD")
   try {
     const groupChat = await GroupChat.findById(req.params.id);
     if (!groupChat) {
-      console.log("Group chat not found");
+
       return res.redirect("/admin/groupChats");
     }
-    const messages = await Message.model.find({ receiverId: req.params.id });
+    let messages = await Message.model.find({ receiverId: req.params.id });
 
+    messages = messages.filter(x => {
+      return moment(x.createdAt).diff(moment(timesAgo), 'Day') === 0
+    })
     return res.render("main/admin/chatGroups/retrieve", {
       messages,
       url: "groupChat",
@@ -32,7 +38,8 @@ const retrieve = async (req, res, next) => {
       groupChat,
       bufferToBase64,
       convertTimestampToHumanTime,
-    });
+      selectedDate: timesAgo
+    })
   } catch (error) {
     console.log(error);
     return res.redirect("/admin/groupChats");

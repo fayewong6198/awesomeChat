@@ -10,8 +10,7 @@ export let lastItemOfArray = (array) => {
   }
   return array[array.length - 1]; //lấy index của phần tử cuối cùng
 };
-
-export let convertTimestampToHumanTime = (timestamp ) => {
+export let convertTimestampToHumanTime = (timestamp) => {
   if (!timestamp) {
     return "";
   }

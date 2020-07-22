@@ -1,159 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Awesome Chat Fak</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <!-- Latest compiled and minified CSS -->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-    />
 
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<head>
+  <title>Awesome Chat Fak</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
 
-    <!-- Popper JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <!-- Popper JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 
-    <style>
-      /* Groupchat CSS */
-      .message-candidate {
-        background: #2cc66e;
-        padding: 5px 20px;
-        max-width: 40%;
-        border-radius: 10px;
-        margin-bottom: 20px;
-      }
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
-      .message-hiring-manager {
-        margin-left: auto;
-        background: #3c93f2;
-        padding: 5px 20px;
-        max-width: 40%;
-        border-radius: 10px;
-        margin-bottom: 20px;
-      }
+  <style>
+    /* Groupchat CSS */
+    .message-candidate {
+      background: #2cc66e;
+      padding: 5px 20px;
+      max-width: 40%;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
 
-      .messaging {
-        max-width: 600px;
-        margin-top: 20px;
-      }
+    .message-hiring-manager {
+      margin-left: auto;
+      background: #3c93f2;
+      padding: 5px 20px;
+      max-width: 40%;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
 
-      .message-text {
-        color: white;
-        word-break: break-all;
-      }
+    .messaging {
+      max-width: 600px;
+      margin-top: 20px;
+    }
 
-      .message-date {
-        margin-left: auto;
-      }
+    .message-text {
+      color: white;
+      word-break: break-all;
+    }
 
-      .message-photo {
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        object-fit: cover;
-        object-position: center center;
-        display: inline-block;
-      }
+    .message-date {
+      margin-left: auto;
+    }
 
-      .message-name {
-        margin: 0 10px;
-        display: inline-block;
-      }
+    .message-photo {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center center;
+      display: inline-block;
+    }
 
-      .message-remove {
-        color: #8f0303;
-      }
+    .message-name {
+      margin: 0 10px;
+      display: inline-block;
+    }
 
-      .content-chat {
-        width: 100%;
-        height: 80vh;
-        padding: 15px 29px;
-        background-color: #fff;
-      }
-      .chat {
-        height: 100%;
-        overflow: auto;
-        position: relative;
-        padding: 0 35px 35px;
-        border-width: 1px 1px 1px 0;
-        border-style: solid;
-        border-color: #e6e6e6;
-        -webkit-box-pack: end;
-        -ms-flex-pack: end;
-        justify-content: flex-end;
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-        flex-direction: column;
-      }
-    </style>
-  </head>
+    .message-remove {
+      color: #8f0303;
+    }
 
-  <body>
-    <%- include("../sections/navbar"); %>
-    <div class="row">
-      <div class="col-md-3">
-        <%- include("../sections/left-side"); %>
-      </div>
-      <div class="col-md-9">
-        <h2 class="text-center">Chat</h2>
-        <div class="container">
-          <div class="content-chat">
-            <div class="chat">
-              <% for (let i = 0; i < messages.length; i++) { %>
-              <div
-                class="message-<% if (messages[i].senderId == groupChat.members[0].userId) { %>candidate<% } else { %>hiring-manager<% }%> candidate center-block"
-              >
-                <div class="row">
-                  <div class="col-xs-3">
-                    <img
-                      src="/images/users/<%- messages[i].sender.avatar %>"
-                      class="message-photo"
-                    />
-                    <h6 class="message-name"><%- messages[i].sender.name %></h6>
-                  </div>
+    .content-chat {
+      width: 100%;
+      height: 80vh;
+      padding: 15px 29px;
+      background-color: #fff;
+    }
 
-                  <% if (messages[i].messageType == 'text') { %>
-                  <div class="col-xs-6 message-text">
-                    <h6><%- messages[i].text %></h6>
-                    <% if (messages[i].deletedAt != null) { %>
-                    <span class="message-remove">
-                      This message has been removed</span
-                    >
-                    <% } %>
-                  </div>
-                  <% }%> <% if (messages[i].messageType == 'image') { %>
-                  <img
-                    src="data:<%- messages[i].file.contentType %>;base64,<%- bufferToBase64(messages[i].file.data) %>"
-                    class=""
-                  />
-                  <% } %> <% if (messages[i].messageType == 'file') { %>
-                  <a
-                    href="data:<%= messages[i].file.contentType %>;base64,<%= bufferToBase64(messages[i].file.data) %>"
-                    download="<%= messages[i].file.fileName %>"
-                  >
-                    <%= messages[i].file.fileName %>
-                  </a>
+    .chat {
+      height: 100%;
+      overflow: auto;
+      position: relative;
+      padding: 0 35px 35px;
+      border-width: 1px 1px 1px 0;
+      border-style: solid;
+      border-color: #e6e6e6;
+      -webkit-box-pack: end;
+      -ms-flex-pack: end;
+      justify-content: flex-end;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+    }
+  </style>
+</head>
+
+<body>
+  <%- include("../sections/navbar"); %>
+  <div class="row">
+    <div class="col-md-3 col-md-offset-1">
+      <%- include("../sections/left-side"); %>
+    </div>
+    <div class="col-md-9">
+      <h2 class="text-center">Chat</h2>
+
+      <div class="container">
+        <form class=" row" action="/admin/groupChats/<%- groupChat._id %>?sender=<%- groupChat.members[0].userId%>&"
+          method="GET">
+          <input type="date" class="form-control col-md-2 mx-2" placeholder="Nhập thời gian" name="times"
+            value="<%-selectedDate %>">
+
+          <button type=submit class="btn btn-outline-secondary mx-2">filter</button>
+        </form>
+        </form>
+
+        <div class="content-chat">
+          <div class="chat">
+            <% for (let i = 0; i < messages.length; i++) { %>
+            <div
+              class="message-<% if (messages[i].senderId == groupChat.members[0].userId) { %>candidate<% } else { %>hiring-manager<% }%> candidate center-block">
+              <div class="row">
+                <div class="col-xs-3">
+                  <img src="/images/users/<%- messages[i].sender.avatar %>" class="message-photo" />
+                  <h6 class="message-name"><%- messages[i].sender.name %></h6>
+                </div>
+
+                <% if (messages[i].messageType == 'text') { %>
+                <div class="col-xs-6 message-text">
+                  <h6><%- messages[i].text %></h6>
+                  <% if (messages[i].deletedAt != null) { %>
+                  <span class="message-remove">
+                    This message has been removed</span>
                   <% } %>
-                  <div class="col-xs-3 message-date">
-                    <%- convertTimestampToHumanTime(messages[i].createdAt) %>
-                  </div>
+                </div>
+                <% }%> <% if (messages[i].messageType == 'image') { %>
+                <img src="data:<%- messages[i].file.contentType %>;base64,<%- bufferToBase64(messages[i].file.data) %>"
+                  class="" />
+                <% } %> <% if (messages[i].messageType == 'file') { %>
+                <a href="data:<%= messages[i].file.contentType %>;base64,<%= bufferToBase64(messages[i].file.data) %>"
+                  download="<%= messages[i].file.fileName %>">
+                  <%= messages[i].file.fileName %>
+                </a>
+                <% } %>
+                <div class="col-xs-3 message-date">
+                  <%- convertTimestampToHumanTime(messages[i].createdAt) %>
                 </div>
               </div>
-              <% } %>
             </div>
+            <% } %>
           </div>
         </div>
       </div>
     </div>
-  </body>
+  </div>
+</body>
 
-  <script></script>
+<script></script>
+
 </html>
