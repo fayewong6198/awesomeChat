@@ -1,6 +1,7 @@
 import { validationResult } from "express-validator/check";
 import { groupChat, contact } from "./../services/index";
 import Notification from "../models/notificationModel";
+import ChatGroup from "../models/chatGroupModel";
 import { resolve } from "bluebird";
 const mongoose = require("mongoose");
 import _ from "lodash";
@@ -52,33 +53,32 @@ let addNewMembers = async (req, res) => {
       arrayMemberIds,
       groupChatId
     );
-    console.log("sadasdasdalskdasjdlkasjdlkjdaslj");
+
     console.log(req.body.arrayIds);
     let newArrayMemberIds = _.uniqBy(req.body.arrayIds, "userId");
     console.log(newArrayMemberIds);
-    console.log(1);
+
     let notificationItems = [];
-    console.log(2);
+
     for (let i = 0; i < newArrayMemberIds.length; i++) {
-      console.log(3, i);
       let notificationItem = {
         senderId: req.user._id,
         receiverId: mongoose.Types.ObjectId(newArrayMemberIds[i].userId),
         type: "ADD_TO_GROUP",
       };
       notificationItems.push(notificationItem);
-      console.log(4, i);
     }
-    console.log("dit me nay", notificationItems);
+
     await Notification.model.create(notificationItems);
-    console.log(5);
+
     //tạo thông báo add to group group chat
+    const chatGroup = await ChatGroup.findById(groupChatId);
 
     console.log(req.user._id);
 
     console.log("create add to group notification success");
 
-    return res.status(200).send({ groupChat: addNewMembers });
+    return res.status(200).send({ groupChat: addNewMembers, chatGroup });
   } catch (error) {
     return res.status(500).send(error);
   }
@@ -120,10 +120,13 @@ let removeMember = async (req, res) => {
       type: "REMOVE_FROM_GROUP",
     };
 
+    const chatGroup = await ChatGroup.findById(groupChatId);
     console.log(req.user._id);
     await Notification.model.create(notificationItem);
     console.log("create remove from group notification success");
-    return res.status(200).send({ success: !!removeMember });
+    return res
+      .status(200)
+      .send({ success: !!removeMember, chatGroup, user: req.user });
   } catch (error) {
     return res.status(500).send(error);
   }

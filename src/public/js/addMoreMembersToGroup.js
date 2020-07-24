@@ -81,6 +81,9 @@ function addNew() {
         success: function (data) {
           $("#btn-cancel-add-more-member").click();
           $("#addMembersModal").modal("hide");
+          $(`#count-members_${data.chatGroup._id}`).html(
+            data.chatGroup.members.length
+          );
         },
         error: function (response) {
           alertify.notify(response.responseText, "error", 7);

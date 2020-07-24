@@ -1,25 +1,31 @@
 function addFriendsToGroup() {
-  $("ul#group-chat-friends").find("div.add-user").bind("click", function() {
-    let uid = $(this).data("uid");
-    $(this).remove();
-    let html = $("ul#group-chat-friends").find("div[data-uid=" + uid + "]").html();
+  $("ul#group-chat-friends")
+    .find("div.add-user")
+    .bind("click", function () {
+      let uid = $(this).data("uid");
+      $(this).remove();
+      let html = $("ul#group-chat-friends")
+        .find("div[data-uid=" + uid + "]")
+        .html();
 
-    let promise = new Promise(function(resolve, reject) {
-      $("ul#friends-added").append(html);
-      $("#groupChatModal .list-user-added").show();
-      resolve(true);
+      let promise = new Promise(function (resolve, reject) {
+        $("ul#friends-added").append(html);
+        $("#groupChatModal .list-user-added").show();
+        resolve(true);
+      });
+      promise.then(function (success) {
+        $("ul#group-chat-friends")
+          .find("div[data-uid=" + uid + "]")
+          .remove();
+      });
     });
-    promise.then(function(success) {
-      $("ul#group-chat-friends").find("div[data-uid=" + uid + "]").remove();
-    });
-  });
 }
 
 function cancelCreateGroup() {
-  $("#btn-cancel-group-chat").bind("click", function() {
+  $("#btn-cancel-group-chat").bind("click", function () {
     $("#groupChatModal .list-user-added").hide();
     if ($("ul#friends-added>li").length) {
-      $("ul#friends-added>li").each(function(index) {
+      $("ul#friends-added>li").each(function (index) {
         $(this).remove();
       });
     }
@@ -27,9 +33,11 @@ function cancelCreateGroup() {
 }
 
 function callSearchFriends(element) {
-  if(element.which === 13 || element.type === "click") {
+  if (element.which === 13 || element.type === "click") {
     let keyword = $("#input-search-friends-to-add-group-chat").val();
-    let regexKeyword = new RegExp(/^[\s0-9a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]+$/);
+    let regexKeyword = new RegExp(
+      /^[\s0-9a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]+$/
+    );
     if (!keyword.length) {
       alertify.notify("Bạn chưa nhập nội dung tìm kiếm.", "error", 7);
       return false;
@@ -39,62 +47,83 @@ function callSearchFriends(element) {
       return false;
     }
 
-    $.get(`/contact/search-friends/${keyword}`, function(data) {
+    $.get(`/contact/search-friends/${keyword}`, function (data) {
       $("ul#group-chat-friends").html(data);
-        // Thêm người dùng vào danh sách liệt kê trước khi tạo nhóm trò chuyện
-        addFriendsToGroup();
-        // Action hủy việc tạo nhóm trò chuyện
-        cancelCreateGroup();
+      // Thêm người dùng vào danh sách liệt kê trước khi tạo nhóm trò chuyện
+      addFriendsToGroup();
+      // Action hủy việc tạo nhóm trò chuyện
+      cancelCreateGroup();
     });
   }
 }
 
 function callCreateGroupChat() {
-  $("#btn-create-group-chat").unbind("click").on("click", function() {
-    let countUsers = $("ul#friends-added").find("li");
-    if (countUsers.length < 2) {
-      alertify.notify("Vui lòng chọn bạn bè để thêm vào nhóm, tối thiếu 2 người bạn.", "error", 7);
-      return false;
-    }
-
-    let groupChatName = $("#input-name-group-chat").val();
-    let regexGroupChatName = new RegExp(/^[\s0-9a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]+$/);
-    if (!regexGroupChatName.test(groupChatName) || groupChatName.length < 5 || groupChatName > 30) {
-      alertify.notify("Đặt tên nhóm giới hạn 5-30 ký tự và không được chứa ký tự đặt biệt.", "error", 7);
-      return false;
-    }
-
-    let arrayIds = [];
-    $("ul#friends-added").find("li").each(function(index, item) {
-      arrayIds.push({"userId": $(item).data("uid")});
-    });
-
-    Swal.fire({
-      title: `Bạn có chắc muốn tạo nhóm trò chuyện &nbsp;${groupChatName} &nbsp;?`,
-      type: "info",
-      showCancelButton: true,
-      confirmButtonColor: "#2ECC71",
-      cancelButtonColor: "#ff7675",
-      confirmButtonText: "xác nhận!",
-      cancelButtonText: "Hủy"
-    }).then((result) => {
-      if (!result.value) {
+  $("#btn-create-group-chat")
+    .unbind("click")
+    .on("click", function () {
+      let countUsers = $("ul#friends-added").find("li");
+      if (countUsers.length < 2) {
+        alertify.notify(
+          "Vui lòng chọn bạn bè để thêm vào nhóm, tối thiếu 2 người bạn.",
+          "error",
+          7
+        );
         return false;
       }
-      $.post("/group-chat/add-new", {
-        arrayIds: arrayIds,
-        groupChatName: groupChatName
-      }, function(data) {
-        //B01 ẩn modal tạo nhóm trò chuyện mới sau khi tạo thành công nhóm trò chuyện
-        $("#input-name-group-chat").val();
-        $("#btn-cancel-group-chat").click();
-        $("#groupChatModal").modal("hide");
-        //B02 handle leftSide.ejs
-        let subGroupChatName = data.groupChat.name;
-        if (subGroupChatName.length > 15) {
-          subGroupChatName = subGroupChatName.substr(0, 14);
+
+      let groupChatName = $("#input-name-group-chat").val();
+      let regexGroupChatName = new RegExp(
+        /^[\s0-9a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]+$/
+      );
+      if (
+        !regexGroupChatName.test(groupChatName) ||
+        groupChatName.length < 5 ||
+        groupChatName > 30
+      ) {
+        alertify.notify(
+          "Đặt tên nhóm giới hạn 5-30 ký tự và không được chứa ký tự đặt biệt.",
+          "error",
+          7
+        );
+        return false;
+      }
+
+      let arrayIds = [];
+      $("ul#friends-added")
+        .find("li")
+        .each(function (index, item) {
+          arrayIds.push({ userId: $(item).data("uid") });
+        });
+
+      Swal.fire({
+        title: `Bạn có chắc muốn tạo nhóm trò chuyện &nbsp;${groupChatName} &nbsp;?`,
+        type: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#2ECC71",
+        cancelButtonColor: "#ff7675",
+        confirmButtonText: "xác nhận!",
+        cancelButtonText: "Hủy",
+      }).then((result) => {
+        if (!result.value) {
+          return false;
         }
-        let leftSideData = `<a href="#uid_${data.groupChat._id}" class="room-chat" data-target="#to_${data.groupChat._id}">
+        $.post(
+          "/group-chat/add-new",
+          {
+            arrayIds: arrayIds,
+            groupChatName: groupChatName,
+          },
+          function (data) {
+            //B01 ẩn modal tạo nhóm trò chuyện mới sau khi tạo thành công nhóm trò chuyện
+            $("#input-name-group-chat").val();
+            $("#btn-cancel-group-chat").click();
+            $("#groupChatModal").modal("hide");
+            //B02 handle leftSide.ejs
+            let subGroupChatName = data.groupChat.name;
+            if (subGroupChatName.length > 15) {
+              subGroupChatName = subGroupChatName.substr(0, 14);
+            }
+            let leftSideData = `<a href="#uid_${data.groupChat._id}" class="room-chat" data-target="#to_${data.groupChat._id}">
                               <li class="person group-chat" data-chat="${data.groupChat._id}">
                                   <div class="left-avatar">
                                       <img src="images/users/group-avatar-trungquandev.png" alt="">
@@ -108,11 +137,11 @@ function callCreateGroupChat() {
                                   <span class="preview"></span>
                               </li>
                           </a>`;
-        $("#all-chat").find("ul").prepend(leftSideData);
-        $("#group-chat").find("ul").prepend(leftSideData);
+            $("#all-chat").find("ul").prepend(leftSideData);
+            $("#group-chat").find("ul").prepend(leftSideData);
 
-        //B03 handle rightSide
-        let rightSideData = `
+            //B03 handle rightSide
+            let rightSideData = `
           <div class="right tab-pane" data-chat="${data.groupChat._id}" id="to_${data.groupChat._id}">
             <div class="top">
               <span>To: <span class="name">${data.groupChat.name}</span></span>
@@ -172,13 +201,13 @@ function callCreateGroupChat() {
             </div>
           </div>
         `;
-        $("#screen-chat").prepend(rightSideData);
+            $("#screen-chat").prepend(rightSideData);
 
-        //B04 call function changeSreenChat in mainConfig
-        changeScreenChat();
+            //B04 call function changeSreenChat in mainConfig
+            changeScreenChat();
 
-        //B05 handle image modal
-        let imageModalData = `
+            //B05 handle image modal
+            let imageModalData = `
           <div class="modal fade" id="imagesModal_${data.groupChat._id}" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -193,13 +222,13 @@ function callCreateGroupChat() {
             </div>
           </div>
         `;
-        $("body").append(imageModalData);
+            $("body").append(imageModalData);
 
-        //B06 call function gridPhotos in mainConfig
-        gridPhotos(5);
+            //B06 call function gridPhotos in mainConfig
+            gridPhotos(5);
 
-        //B07 handle attachment modal
-        let attachmentModalData = `
+            //B07 handle attachment modal
+            let attachmentModalData = `
           <div class="modal fade" id="attachmentsModal_${data.groupChat._id}" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -214,9 +243,9 @@ function callCreateGroupChat() {
             </div>
           </div>
         `;
-        $("body").append(attachmentModalData);
+            $("body").append(attachmentModalData);
 
-        let groupMembersModalData = `
+            let groupMembersModalData = `
           <div class="modal fade" id="groupMembersModal_${data.groupChat._id}" role="dialog">
             <div class="modal-dialog modal-lg">
               <div class="modal-content">
@@ -231,28 +260,31 @@ function callCreateGroupChat() {
             </div>
           </div>
           `;
-    $("body").append(groupMembersModalData);
+            $("body").append(groupMembersModalData);
 
-        //B08 emit created new group
-        socket.emit("new-group-created", {groupChat: data.groupChat});
+            //B08 emit created new group
+            socket.emit("new-group-created", { groupChat: data.groupChat });
 
-        //B10 update online
-        socket.emit("check-status");
+            //B10 update online
+            socket.emit("check-status");
 
-        userTalk();
-
-      }).fail(function(response) {
-        alertify.notify(response.responseText, "error", 7);
+            userTalk();
+          }
+        ).fail(function (response) {
+          alertify.notify(response.responseText, "error", 7);
+        });
       });
     });
-  });
 }
 
-$(document).ready(function() {
-  $("#input-search-friends-to-add-group-chat").bind("keypress", callSearchFriends);
+$(document).ready(function () {
+  $("#input-search-friends-to-add-group-chat").bind(
+    "keypress",
+    callSearchFriends
+  );
   $("#btn-search-friends-to-add-group-chat").bind("click", callSearchFriends);
   callCreateGroupChat();
-  socket.on("response-new-group-created", function(response) {
+  socket.on("response-new-group-created", function (response) {
     //B01 ẩn modal tạo nhóm trò chuyện mới sau khi tạo thành công nhóm trò chuyện
     //B02 handle leftSide.ejs
     let subGroupChatName = response.groupChat.name;
@@ -401,7 +433,9 @@ $(document).ready(function() {
 
     //B08 emit created new group
     //B09
-    socket.emit("member-received-group-chat", {groupChatId: response.groupChat._id});
+    socket.emit("member-received-group-chat", {
+      groupChatId: response.groupChat._id,
+    });
     //B10 update online
     socket.emit("check-status");
 
