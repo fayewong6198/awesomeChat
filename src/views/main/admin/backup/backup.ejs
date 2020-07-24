@@ -51,6 +51,25 @@
             Backup Database
           </button>
         </form>
+        <form action="/admin/restore" method="POST">
+          Please choose the version of database to restore
+          <div class="row">
+            <div class="col-xs-12 col-md-8 m-1">
+              <select class="custom-select" name="version">
+                <% for (let i = 0; i < backupMongooseVersions.length; i++) { %>
+                <option value="<%- backupMongooseVersions[i] %>"
+                  ><%- convertDate(backupMongooseVersions[i]) %></option
+                >
+                <% } %>
+              </select>
+            </div>
+            <div class="col-xs-12 col-md-3 m-1">
+              <button class="btn btn-danger" type="submit">
+                Restore Database
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </body>

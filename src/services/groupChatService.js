@@ -60,7 +60,7 @@ let addNewMembers = (arrayMemberIds, groupChatId) => {
       //thêm userId vào mảng array members
       //arrayMemberIds.unshift({userId: `${currentUserId}`});
       arrayMemberIds = _.uniqBy(arrayMemberIds, "userId");
-
+      console.log(arrayMemberIds);
       let chatGroup = await chatGroupModel.findById(groupChatId);
 
       let mongooeseObjectArrayMemberIds = JSON.parse(

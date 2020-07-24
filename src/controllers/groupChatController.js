@@ -1,7 +1,9 @@
 import { validationResult } from "express-validator/check";
 import { groupChat, contact } from "./../services/index";
+import Notification from "../models/notificationModel";
 import { resolve } from "bluebird";
-
+const mongoose = require("mongoose");
+import _ from "lodash";
 let addNewGroup = async (req, res) => {
   let errorsArr = [];
   let validationErrors = validationResult(req);
@@ -23,6 +25,7 @@ let addNewGroup = async (req, res) => {
       arrayMemberIds,
       groupChatName
     );
+
     return res.status(200).send({ groupChat: newGroupChat });
   } catch (error) {
     return res.status(500).send(error);
@@ -45,13 +48,36 @@ let addNewMembers = async (req, res) => {
     let arrayMemberIds = req.body.arrayIds;
     let groupChatId = req.body.groupChatId;
 
-    console.log("before");
-
     let addNewMembers = await groupChat.addNewMembers(
       arrayMemberIds,
       groupChatId
     );
-    console.log("after");
+    console.log("sadasdasdalskdasjdlkasjdlkjdaslj");
+    console.log(req.body.arrayIds);
+    let newArrayMemberIds = _.uniqBy(req.body.arrayIds, "userId");
+    console.log(newArrayMemberIds);
+    console.log(1);
+    let notificationItems = [];
+    console.log(2);
+    for (let i = 0; i < newArrayMemberIds.length; i++) {
+      console.log(3, i);
+      let notificationItem = {
+        senderId: req.user._id,
+        receiverId: mongoose.Types.ObjectId(newArrayMemberIds[i].userId),
+        type: "ADD_TO_GROUP",
+      };
+      notificationItems.push(notificationItem);
+      console.log(4, i);
+    }
+    console.log("dit me nay", notificationItems);
+    await Notification.model.create(notificationItems);
+    console.log(5);
+    //tạo thông báo add to group group chat
+
+    console.log(req.user._id);
+
+    console.log("create add to group notification success");
+
     return res.status(200).send({ groupChat: addNewMembers });
   } catch (error) {
     return res.status(500).send(error);
@@ -86,6 +112,17 @@ let removeMember = async (req, res) => {
     let contactId = req.body.uid;
     let groupChatId = req.body.groupChatId;
     let removeMember = await groupChat.removeMember(contactId, groupChatId);
+
+    //tạo thông báo remove khoi group chat
+    let notificationItem = {
+      senderId: req.user._id,
+      receiverId: contactId,
+      type: "REMOVE_FROM_GROUP",
+    };
+
+    console.log(req.user._id);
+    await Notification.model.create(notificationItem);
+    console.log("create remove from group notification success");
     return res.status(200).send({ success: !!removeMember });
   } catch (error) {
     return res.status(500).send(error);
