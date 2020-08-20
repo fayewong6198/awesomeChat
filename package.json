@@ -20,7 +20,7 @@
   "dependencies": {
     "archiver": "^4.0.2",
     "backup": "^1.1.0",
-    "bcrypt": "^4.0.1",
+    "bcrypt": "^5.0.0",
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.2",
     "client-oauth2": "^4.3.1",
