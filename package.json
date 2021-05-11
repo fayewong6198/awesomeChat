@@ -36,7 +36,7 @@
     "express-session": "^1.15.6",
     "express-validator": "^4.3.0",
     "fs-extra": "^7.0.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "moment": "^2.25.3",
     "mongodb-backup": "^1.6.9",
     "mongodb-restore": "^1.6.2",
